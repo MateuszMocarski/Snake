@@ -35,6 +35,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private ImageIcon snake_left_face;
     private ImageIcon snake_up_face;
     private ImageIcon snake_down_face;
+    private ImageIcon black_field;
 
     private int appleAmount = 0;
     private ImageIcon apple;
@@ -108,7 +109,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         g.setFont(new Font("arial", Font.PLAIN, 14));
         double speed = 20000 / (double) (delay - speedFactor * totalAmountOfEatenApples);
         DecimalFormat df = new DecimalFormat("#.##");
-        g.drawString("Speed: " + df.format(speed), 30, 30);
+        g.drawString("Speed: " + df.format(speed) + "%", 30, 30);
 
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
         //game over info
@@ -118,7 +119,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.drawString("GAME OVER", 350, 350);
 
             g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press 'R' to restart", 425, 400);
+            g.drawString("Press 'R' to restart game", 390, 400);
             if (snakeSave.exists()) {
                 g.setColor(Color.WHITE);
                 g.setFont(new Font("arial", Font.BOLD, 20));
@@ -132,7 +133,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.drawString("Press 'L' to load game", 400, 350);
         }
 
-        if (stopped) {
+        if (stopped && !deathCondition()) {
+
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press 'S' to save game", 400, 350);
@@ -140,12 +142,16 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             if (snakeSave.exists()) {
                 g.setColor(Color.WHITE);
                 g.setFont(new Font("arial", Font.BOLD, 20));
-                g.drawString("Press 'L' to load game", 400, 375);
+                g.drawString("Press 'L' to load game", 402, 375);
             }
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press SPACE to resume game", 360, 400);
+            g.drawString("Press 'R' to restart game", 392, 400);
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press SPACE to resume game", 360, 425);
         }
 
         snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
@@ -178,7 +184,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             appleY = randomizeAppleYLocation();
             appleAmount++;
         }
-        apple = new ImageIcon("src/images/moth_transparent.png");
+        apple = new ImageIcon("src/images/apple_transparent.png");
         apple.paintIcon(this, g, appleX, appleY);
 
         if (isAppleEaten()) {
@@ -214,6 +220,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
         for (int i = 1; i <= lengthOfSnake - 1; i++) {
             if (snakeXlength[0] == snakeXlength[i] && snakeYlength[0] == snakeYlength[i]) {
+                stopped = true;
                 return true;
             }
         }
@@ -293,9 +300,15 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             moves = 0;
             totalAmountOfEatenApples = 0;
             lengthOfSnake = 3;
+            right = true;
+            left = false;
+            up = false;
+            down = false;
+            stopped = false;
             repaint();
             ActionEvent asd = null;
             actionPerformed(asd);
+
         }
 
         if (moves != 0 && !deathCondition() && stopped && e.getKeyCode() == KeyEvent.VK_S) {
@@ -304,6 +317,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         if ((moves == 0 || stopped) && e.getKeyCode() == KeyEvent.VK_L) {
             loadGame();
+            stopped = false;
             this.appleAmount = 0;
             ActionEvent asd = null;
             actionPerformed(asd);
@@ -412,10 +426,28 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 ex.getMessage();
             }
             writer = new BufferedWriter(new FileWriter(snakeSave));
+            writer.write(Integer.toString(moves));
+            writer.newLine();
             writer.write(Integer.toString(lengthOfSnake));
             writer.newLine();
             writer.write(Integer.toString(totalAmountOfEatenApples));
             writer.newLine();
+            if (right) {
+                writer.write("Right");
+                writer.newLine();
+            }
+            if (left) {
+                writer.write("Left");
+                writer.newLine();
+            }
+            if (up) {
+                writer.write("Up");
+                writer.newLine();
+            }
+            if (down) {
+                writer.write("Down");
+                writer.newLine();
+            }
             for (int i = 0; i <= lengthOfSnake - 1; i++) {
                 writer.write(Integer.toString(snakeXlength[i]) + "|" + Integer.toString(snakeYlength[i]));
                 writer.newLine();
@@ -432,9 +464,34 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             try {
                 FileReader fr = new FileReader(snakeSave);
                 BufferedReader br = new BufferedReader(fr);
-
+                this.moves = Integer.parseInt(br.readLine());
                 this.lengthOfSnake = Integer.parseInt(br.readLine());
                 this.totalAmountOfEatenApples = Integer.parseInt(br.readLine());
+                String direction = br.readLine();
+                if(direction.equals("Right")){
+                    right = true;
+                    left = false;
+                    up = false;
+                    down = false;
+                }
+                if(direction.equals("Left")){
+                    right = false;
+                    left = true;
+                    up = false;
+                    down = false;
+                }
+                if(direction.equals("Up")){
+                    right = false;
+                    left = false;
+                    up = true;
+                    down = false;
+                }
+                if(direction.equals("Down")){
+                    right = false;
+                    left = false;
+                    up = false;
+                    down = true;
+                }
 
                 for (int i = 0; i <= lengthOfSnake - 1; i++) {
                     String coordinates = br.readLine();
