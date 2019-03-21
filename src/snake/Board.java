@@ -3,6 +3,7 @@ package snake;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,7 +16,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
+import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -37,6 +44,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private ImageIcon snake_down_face;
     private ImageIcon black_field;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     private int appleAmount = 0;
     private ImageIcon apple;
     private int appleX;
@@ -44,8 +53,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private int lengthOfSnake = 3;
 
-    private Timer timer;
-    private int delay = 200;
+    private final Timer timer;
+    private final int delay = 200;
 
     private ImageIcon snake_torso;
 
@@ -53,8 +62,10 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private int moves = 0;
     private int totalAmountOfEatenApples = 0;
+    
+    private List<Score> listOfHighScores = new ArrayList<>();
 
-    private int speedFactor = 5;
+    private final int speedFactor = 5;
 
     public Board() {
 
@@ -97,7 +108,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         //draw score
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
-        g.drawString("Score: " + totalAmountOfEatenApples, 900, 50);
+        g.drawString("Score: " + totalAmountOfEatenApples * 5, 900, 50);
 
         //draw length
         g.setColor(Color.WHITE);
@@ -112,47 +123,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         g.drawString("Speed: " + df.format(speed) + "%", 30, 30);
 
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
-        //game over info
-        if (deathCondition()) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", Font.BOLD, 50));
-            g.drawString("GAME OVER", 350, 350);
-
-            g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press 'R' to restart game", 390, 400);
-            if (snakeSave.exists()) {
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("arial", Font.BOLD, 20));
-                g.drawString("Press 'L' to load game", 400, 425);
-            }
-        }
-
-        if (moves == 0 && snakeSave.exists()) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press 'L' to load game", 400, 350);
-        }
-
-        if (stopped && !deathCondition()) {
-
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press 'S' to save game", 400, 350);
-
-            if (snakeSave.exists()) {
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("arial", Font.BOLD, 20));
-                g.drawString("Press 'L' to load game", 402, 375);
-            }
-
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press 'R' to restart game", 392, 400);
-
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("arial", Font.BOLD, 20));
-            g.drawString("Press SPACE to resume game", 360, 425);
-        }
 
         snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
         snake_right_face.paintIcon(this, g, snakeXlength[0], snakeYlength[0]);
@@ -191,6 +161,50 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             lengthOfSnake++;
             appleAmount--;
             totalAmountOfEatenApples++;
+        }
+
+        //game over info
+        if (deathCondition()) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 50));
+            g.drawString("GAME OVER", 350, 350);
+
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press 'R' to restart game", 390, 400);
+            if (snakeSave.exists()) {
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("arial", Font.BOLD, 20));
+                g.drawString("Press 'L' to load game", 400, 425);
+            }
+
+            writeHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalAmountOfEatenApples * 5, sdf.format(Calendar.getInstance().getTime())))));
+        }
+
+        if (moves == 0 && snakeSave.exists()) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press 'L' to load game", 400, 350);
+        }
+
+        if (stopped && !deathCondition()) {
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press 'S' to save game", 400, 350);
+
+            if (snakeSave.exists()) {
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("arial", Font.BOLD, 20));
+                g.drawString("Press 'L' to load game", 402, 375);
+            }
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press 'R' to restart game", 392, 400);
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("arial", Font.BOLD, 20));
+            g.drawString("Press SPACE to resume game", 360, 425);
         }
     }
 
@@ -468,25 +482,25 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 this.lengthOfSnake = Integer.parseInt(br.readLine());
                 this.totalAmountOfEatenApples = Integer.parseInt(br.readLine());
                 String direction = br.readLine();
-                if(direction.equals("Right")){
+                if (direction.equals("Right")) {
                     right = true;
                     left = false;
                     up = false;
                     down = false;
                 }
-                if(direction.equals("Left")){
+                if (direction.equals("Left")) {
                     right = false;
                     left = true;
                     up = false;
                     down = false;
                 }
-                if(direction.equals("Up")){
+                if (direction.equals("Up")) {
                     right = false;
                     left = false;
                     up = true;
                     down = false;
                 }
-                if(direction.equals("Down")){
+                if (direction.equals("Down")) {
                     right = false;
                     left = false;
                     up = false;
@@ -506,5 +520,47 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 ex.getMessage();
             }
         }
+    }
+    
+    public List sortHighScoresList(List<Score> listOfHighScores){
+        listOfHighScores.sort(Comparator.comparing(Score::getScore).reversed());
+        return listOfHighScores;
+    }
+    
+    public void writeHighScoresList(List<Score> listOfHighScores) {
+        for (Score score : listOfHighScores) {
+            System.out.println("Date: " + score.getDate() + " Score: " + score.getScore());
+        }
+    }
+
+    public List addToHighScores(List<Score> listOfScores, Score score) {
+        listOfScores.add(score);
+        return listOfScores;
+    }
+
+    public class Score implements Comparable{
+
+        private final int score;
+        private final String date;
+
+        public Score(int score, String date) {
+            this.score = score;
+            this.date = date;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            int objectScore = ((Score)o).getScore();
+            return objectScore - this.getScore();
+        }
+
     }
 }
