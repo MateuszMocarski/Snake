@@ -20,11 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -65,6 +61,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private int moves = 0;
     private int totalAmountOfEatenApples = 0;
     private int totalScore;
+
+    private boolean saveStatus = false;
 
     private List<Score> listOfHighScores = new ArrayList<>();
 
@@ -181,12 +179,18 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 g.drawString("Press 'L' to load game", 400, 425);
             }
             File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
-            if (highScores.exists()) {
-
-                saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
-            } else {
-                saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+            if (!saveStatus) {
+                if (highScores.exists()) {
+                    listOfHighScores = loadHighScoresList();
+                    saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+                } else {
+                    saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+                }
+                saveStatus = true;
             }
+            write3HighestScores(loadHighScoresList(), g);
+            listOfHighScores.clear();
+
         }
 
         if (moves == 0 && snakeSave.exists()) {
@@ -328,6 +332,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             up = false;
             down = false;
             stopped = false;
+            saveStatus = false;
             repaint();
             ActionEvent asd = null;
             actionPerformed(asd);
@@ -342,6 +347,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             loadGame();
             stopped = false;
             this.appleAmount = 0;
+            saveStatus = false;
             ActionEvent asd = null;
             actionPerformed(asd);
         }
@@ -545,36 +551,42 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 snakeDirectory.mkdirs();
             }
             File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
+            if (highScores.exists()) {
+                highScores.delete();
+            }
             try {
                 highScores.createNewFile();
             } catch (IOException ex) {
                 ex.getMessage();
             }
             writer = new BufferedWriter(new FileWriter(highScores));
-            for (Score score : listOfHighScores) {
-                writer.write(Integer.toString(score.getScore()) + "|" + score.getDate());
-                writer.newLine();
+            if (listOfHighScores.size() < 3) {
+                for (Score score : listOfHighScores) {
+                    writer.write(Integer.toString(score.getScore()) + "|" + score.getDate());
+                    writer.newLine();
+                }
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    writer.write(Integer.toString(listOfHighScores.get(i).getScore()) + "|" + listOfHighScores.get(i).getDate());
+                    writer.newLine();
+                }
             }
             writer.close();
         } catch (IOException ex) {
             ex.getMessage();
-
         }
+        listOfHighScores.clear();
     }
 
-    public void loadHighScoresList() {
+    public List<Score> loadHighScoresList() {
         File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
         if (highScores.exists()) {
             try {
                 FileReader fr = new FileReader(highScores);
                 BufferedReader br = new BufferedReader(fr);
-
-                while (br.readLine() != null) {
-                    String scoreString = br.readLine();
+                String scoreString;
+                while ((scoreString = br.readLine()) != null) {
                     String[] scores = scoreString.split("\\|");
-                    for (String scoreasd : scores) {
-                        System.out.println(scoreasd);
-                    }
                     addToHighScores(listOfHighScores, new Score(Integer.parseInt(scores[0]), scores[1]));
 
                 }
@@ -584,6 +596,24 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 ex.getMessage();
             }
         }
+        return listOfHighScores;
+    }
+
+    public void write3HighestScores(List<Score> listOfScores, Graphics g) {
+        if (listOfScores.size() < 3) {
+            for (int i = 0; i < listOfScores.size(); i++) {
+                g.setColor(Color.white);
+                g.setFont(new Font("arial", Font.BOLD, 20));
+                g.drawString("Score: " + listOfScores.get(i).getScore() + "   Date: " + listOfScores.get(i).getDate(), 320, 475 + i * 25);
+            }
+        } else {
+            for (int i = 0; i < 3; i++) {
+                g.setColor(Color.white);
+                g.setFont(new Font("arial", Font.BOLD, 20));
+                g.drawString("Score: " + listOfScores.get(i).getScore() + "   Date: " + listOfScores.get(i).getDate(), 320, 475 + i * 25);
+            }
+        }
+
     }
 
     public List addToHighScores(List<Score> listOfScores, Score score) {
