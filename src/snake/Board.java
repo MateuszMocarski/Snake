@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -62,7 +64,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private int moves = 0;
     private int totalAmountOfEatenApples = 0;
-    
+    private int totalScore;
+
     private List<Score> listOfHighScores = new ArrayList<>();
 
     private final int speedFactor = 5;
@@ -106,9 +109,10 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         g.fillRect(20, 76, 950, 675);
 
         //draw score
+        totalScore = 5 * totalAmountOfEatenApples;
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
-        g.drawString("Score: " + totalAmountOfEatenApples * 5, 900, 50);
+        g.drawString("Score: " + totalScore, 900, 50);
 
         //draw length
         g.setColor(Color.WHITE);
@@ -176,8 +180,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 g.setFont(new Font("arial", Font.BOLD, 20));
                 g.drawString("Press 'L' to load game", 400, 425);
             }
+            File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
+            if (highScores.exists()) {
 
-            writeHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalAmountOfEatenApples * 5, sdf.format(Calendar.getInstance().getTime())))));
+                saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+            } else {
+                saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+            }
         }
 
         if (moves == 0 && snakeSave.exists()) {
@@ -521,15 +530,59 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             }
         }
     }
-    
-    public List sortHighScoresList(List<Score> listOfHighScores){
-        listOfHighScores.sort(Comparator.comparing(Score::getScore).reversed());
+
+    public List sortHighScoresList(List<Score> listOfHighScores) {
+        Collections.sort(listOfHighScores);
         return listOfHighScores;
     }
-    
-    public void writeHighScoresList(List<Score> listOfHighScores) {
-        for (Score score : listOfHighScores) {
-            System.out.println("Date: " + score.getDate() + " Score: " + score.getScore());
+
+    public void saveHighScoresList(List<Score> listOfHighScores) {
+        try {
+            BufferedWriter writer = null;
+
+            File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
+            if (!snakeDirectory.exists()) {
+                snakeDirectory.mkdirs();
+            }
+            File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
+            try {
+                highScores.createNewFile();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
+            writer = new BufferedWriter(new FileWriter(highScores));
+            for (Score score : listOfHighScores) {
+                writer.write(Integer.toString(score.getScore()) + "|" + score.getDate());
+                writer.newLine();
+            }
+            writer.close();
+        } catch (IOException ex) {
+            ex.getMessage();
+
+        }
+    }
+
+    public void loadHighScoresList() {
+        File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
+        if (highScores.exists()) {
+            try {
+                FileReader fr = new FileReader(highScores);
+                BufferedReader br = new BufferedReader(fr);
+
+                while (br.readLine() != null) {
+                    String scoreString = br.readLine();
+                    String[] scores = scoreString.split("\\|");
+                    for (String scoreasd : scores) {
+                        System.out.println(scoreasd);
+                    }
+                    addToHighScores(listOfHighScores, new Score(Integer.parseInt(scores[0]), scores[1]));
+
+                }
+            } catch (FileNotFoundException ex) {
+                ex.getMessage();
+            } catch (IOException ex) {
+                ex.getMessage();
+            }
         }
     }
 
@@ -538,7 +591,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         return listOfScores;
     }
 
-    public class Score implements Comparable{
+    public class Score implements Comparable {
 
         private final int score;
         private final String date;
@@ -558,7 +611,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         @Override
         public int compareTo(Object o) {
-            int objectScore = ((Score)o).getScore();
+            int objectScore = ((Score) o).getScore();
             return objectScore - this.getScore();
         }
 

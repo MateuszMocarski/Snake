@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 public class Snake {
 
     public static void main(String[] args) {
+        
         JFrame frame = new JFrame();
         Board board = new Board();
 
@@ -19,7 +20,7 @@ public class Snake {
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Snake v1");
+        frame.setTitle("Snake v2");
         frame.add(board);
 
     }
