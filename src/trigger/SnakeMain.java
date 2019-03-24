@@ -1,9 +1,10 @@
-package snake;
+package trigger;
 
 import java.awt.Color;
 import javax.swing.JFrame;
+import view.Board;
 
-public class Snake {
+public class SnakeMain {
 
     public static void main(String[] args) {
         

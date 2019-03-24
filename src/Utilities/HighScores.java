@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import snake.Board;
+import view.Board;
 
 /**
  *
