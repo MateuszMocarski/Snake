@@ -1,5 +1,12 @@
 package snake;
 
+import Utilities.saveAndLoad;
+import Utilities.Score;
+import Utilities.HighScores;
+import static Utilities.HighScores.loadHighScoresList;
+import static Utilities.HighScores.saveHighScoresList;
+import static Utilities.HighScores.sortHighScoresList;
+import static Utilities.HighScores.write3HighestScores;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,18 +15,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -27,21 +27,98 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements KeyListener, ActionListener {
 
-    private int[] snakeXlength = new int[750];
-    private int[] snakeYlength = new int[750];
+    private static int[] snakeXlength = new int[750];
+    private static int[] snakeYlength = new int[750];
 
-    private boolean left = false;
-    private boolean right = false;
-    private boolean up = false;
-    private boolean down = false;
+    private static boolean left = false;
+    private static boolean right = false;
+    private static boolean up = false;
+    private static boolean down = false;
     private boolean stopped = false;
 
     private ImageIcon snake_right_face;
     private ImageIcon snake_left_face;
     private ImageIcon snake_up_face;
     private ImageIcon snake_down_face;
-    private ImageIcon black_field;
 
+    public static List<Score> getListOfHighScores() {
+        return listOfHighScores;
+    }
+
+
+    public static int[] getSnakeXlength() {
+        return snakeXlength;
+    }
+
+    public static int[] getSnakeYlength() {
+        return snakeYlength;
+    }
+
+    public static boolean isLeft() {
+        return left;
+    }
+
+    public static boolean isRight() {
+        return right;
+    }
+
+    public static boolean isUp() {
+        return up;
+    }
+
+    public static boolean isDown() {
+        return down;
+    }
+
+    public static int getLengthOfSnake() {
+        return lengthOfSnake;
+    }
+
+    public static int getMoves() {
+        return moves;
+    }
+
+    public static int getTotalAmountOfEatenApples() {
+        return totalAmountOfEatenApples;
+    }
+
+    public static void setSnakeXlength(int snakeXlength, int i) {
+        Board.snakeXlength[i] = snakeXlength;
+    }
+
+    public static void setSnakeYlength(int snakeYlength, int i) {
+        Board.snakeYlength[i] = snakeYlength;
+    }
+
+    public static void setLeft(boolean left) {
+        Board.left = left;
+    }
+
+    public static void setRight(boolean right) {
+        Board.right = right;
+    }
+
+    public static void setUp(boolean up) {
+        Board.up = up;
+    }
+
+    public static void setDown(boolean down) {
+        Board.down = down;
+    }
+
+    public static void setLengthOfSnake(int lengthOfSnake) {
+        Board.lengthOfSnake = lengthOfSnake;
+    }
+
+    public static void setMoves(int moves) {
+        Board.moves = moves;
+    }
+
+    public static void setTotalAmountOfEatenApples(int totalAmountOfEatenApples) {
+        Board.totalAmountOfEatenApples = totalAmountOfEatenApples;
+    }
+
+    
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private int appleAmount = 0;
@@ -49,7 +126,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private int appleX;
     private int appleY;
 
-    private int lengthOfSnake = 3;
+    private static int lengthOfSnake = 3;
 
     private final Timer timer;
     private final int delay = 200;
@@ -58,13 +135,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private ImageIcon titleImage;
 
-    private int moves = 0;
-    private int totalAmountOfEatenApples = 0;
+    private static int moves = 0;
+    private static int totalAmountOfEatenApples = 0;
     private int totalScore;
 
     private boolean saveStatus = false;
 
-    private List<Score> listOfHighScores = new ArrayList<>();
+    private static List<Score> listOfHighScores = new ArrayList<>();
 
     private final int speedFactor = 5;
 
@@ -182,9 +259,9 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             if (!saveStatus) {
                 if (highScores.exists()) {
                     listOfHighScores = loadHighScoresList();
-                    saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+                    saveHighScoresList(sortHighScoresList(HighScores.addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
                 } else {
-                    saveHighScoresList(sortHighScoresList(addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
+                    saveHighScoresList(sortHighScoresList(HighScores.addToHighScores(listOfHighScores, new Score(totalScore, sdf.format(Calendar.getInstance().getTime())))));
                 }
                 saveStatus = true;
             }
@@ -340,11 +417,11 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
 
         if (moves != 0 && !deathCondition() && stopped && e.getKeyCode() == KeyEvent.VK_S) {
-            saveGame();
+            saveAndLoad.saveGame();
         }
 
         if ((moves == 0 || stopped) && e.getKeyCode() == KeyEvent.VK_L) {
-            loadGame();
+            saveAndLoad.loadGame();
             stopped = false;
             this.appleAmount = 0;
             saveStatus = false;
@@ -441,209 +518,17 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
     }
 
-    public void saveGame() {
-        BufferedWriter writer = null;
-        try {
-            File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
-            if (!snakeDirectory.exists()) {
-                snakeDirectory.mkdirs();
-            }
-            File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
-            try {
-                snakeSave.createNewFile();
-            } catch (IOException ex) {
-                ex.getMessage();
-            }
-            writer = new BufferedWriter(new FileWriter(snakeSave));
-            writer.write(Integer.toString(moves));
-            writer.newLine();
-            writer.write(Integer.toString(lengthOfSnake));
-            writer.newLine();
-            writer.write(Integer.toString(totalAmountOfEatenApples));
-            writer.newLine();
-            if (right) {
-                writer.write("Right");
-                writer.newLine();
-            }
-            if (left) {
-                writer.write("Left");
-                writer.newLine();
-            }
-            if (up) {
-                writer.write("Up");
-                writer.newLine();
-            }
-            if (down) {
-                writer.write("Down");
-                writer.newLine();
-            }
-            for (int i = 0; i <= lengthOfSnake - 1; i++) {
-                writer.write(Integer.toString(snakeXlength[i]) + "|" + Integer.toString(snakeYlength[i]));
-                writer.newLine();
-            }
-            writer.close();
-        } catch (IOException ex) {
-            ex.getMessage();
-        }
-    }
+    
 
-    public void loadGame() {
-        File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
-        if (snakeSave.exists()) {
-            try {
-                FileReader fr = new FileReader(snakeSave);
-                BufferedReader br = new BufferedReader(fr);
-                this.moves = Integer.parseInt(br.readLine());
-                this.lengthOfSnake = Integer.parseInt(br.readLine());
-                this.totalAmountOfEatenApples = Integer.parseInt(br.readLine());
-                String direction = br.readLine();
-                if (direction.equals("Right")) {
-                    right = true;
-                    left = false;
-                    up = false;
-                    down = false;
-                }
-                if (direction.equals("Left")) {
-                    right = false;
-                    left = true;
-                    up = false;
-                    down = false;
-                }
-                if (direction.equals("Up")) {
-                    right = false;
-                    left = false;
-                    up = true;
-                    down = false;
-                }
-                if (direction.equals("Down")) {
-                    right = false;
-                    left = false;
-                    up = false;
-                    down = true;
-                }
+    
 
-                for (int i = 0; i <= lengthOfSnake - 1; i++) {
-                    String coordinates = br.readLine();
-                    String[] arrayOfCoordinates = coordinates.split("\\|");
-                    this.snakeXlength[i] = Integer.parseInt(arrayOfCoordinates[0]);
-                    this.snakeYlength[i] = Integer.parseInt(arrayOfCoordinates[1]);
+    
 
-                }
-            } catch (FileNotFoundException ex) {
-                ex.getMessage();
-            } catch (IOException ex) {
-                ex.getMessage();
-            }
-        }
-    }
+    
 
-    public List sortHighScoresList(List<Score> listOfHighScores) {
-        Collections.sort(listOfHighScores);
-        return listOfHighScores;
-    }
+    
 
-    public void saveHighScoresList(List<Score> listOfHighScores) {
-        try {
-            BufferedWriter writer = null;
+    
 
-            File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
-            if (!snakeDirectory.exists()) {
-                snakeDirectory.mkdirs();
-            }
-            File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
-            if (highScores.exists()) {
-                highScores.delete();
-            }
-            try {
-                highScores.createNewFile();
-            } catch (IOException ex) {
-                ex.getMessage();
-            }
-            writer = new BufferedWriter(new FileWriter(highScores));
-            if (listOfHighScores.size() < 3) {
-                for (Score score : listOfHighScores) {
-                    writer.write(Integer.toString(score.getScore()) + "|" + score.getDate());
-                    writer.newLine();
-                }
-            } else {
-                for (int i = 0; i < 3; i++) {
-                    writer.write(Integer.toString(listOfHighScores.get(i).getScore()) + "|" + listOfHighScores.get(i).getDate());
-                    writer.newLine();
-                }
-            }
-            writer.close();
-        } catch (IOException ex) {
-            ex.getMessage();
-        }
-        listOfHighScores.clear();
-    }
-
-    public List<Score> loadHighScoresList() {
-        File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
-        if (highScores.exists()) {
-            try {
-                FileReader fr = new FileReader(highScores);
-                BufferedReader br = new BufferedReader(fr);
-                String scoreString;
-                while ((scoreString = br.readLine()) != null) {
-                    String[] scores = scoreString.split("\\|");
-                    addToHighScores(listOfHighScores, new Score(Integer.parseInt(scores[0]), scores[1]));
-
-                }
-            } catch (FileNotFoundException ex) {
-                ex.getMessage();
-            } catch (IOException ex) {
-                ex.getMessage();
-            }
-        }
-        return listOfHighScores;
-    }
-
-    public void write3HighestScores(List<Score> listOfScores, Graphics g) {
-        if (listOfScores.size() < 3) {
-            for (int i = 0; i < listOfScores.size(); i++) {
-                g.setColor(Color.white);
-                g.setFont(new Font("arial", Font.BOLD, 20));
-                g.drawString("Score: " + listOfScores.get(i).getScore() + "   Date: " + listOfScores.get(i).getDate(), 320, 475 + i * 25);
-            }
-        } else {
-            for (int i = 0; i < 3; i++) {
-                g.setColor(Color.white);
-                g.setFont(new Font("arial", Font.BOLD, 20));
-                g.drawString("Score: " + listOfScores.get(i).getScore() + "   Date: " + listOfScores.get(i).getDate(), 320, 475 + i * 25);
-            }
-        }
-
-    }
-
-    public List addToHighScores(List<Score> listOfScores, Score score) {
-        listOfScores.add(score);
-        return listOfScores;
-    }
-
-    public class Score implements Comparable {
-
-        private final int score;
-        private final String date;
-
-        public Score(int score, String date) {
-            this.score = score;
-            this.date = date;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-            int objectScore = ((Score) o).getScore();
-            return objectScore - this.getScore();
-        }
-
-    }
+    
 }
