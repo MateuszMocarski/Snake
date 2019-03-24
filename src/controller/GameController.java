@@ -61,87 +61,89 @@ public class GameController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Board board = new Board();  
-        boolean gameOver = deathCondition();
-        timer.setDelay(delay - speedFactor * AppleModel.getTotalAmountOfEatenApples());
-        timer.start();
-        if (gameOver) {
-            SnakeModel.setRight(false);
-            SnakeModel.setLeft(false);
-            SnakeModel.setUp(false);
-            SnakeModel.setDown(false);
+        if (!stopped) {
+
+            //Board board = new Board();  
+            boolean gameOver = deathCondition();
+            timer.setDelay(delay - speedFactor * AppleModel.getTotalAmountOfEatenApples());
+            timer.start();
+            if (gameOver) {
+                SnakeModel.setRight(false);
+                SnakeModel.setLeft(false);
+                SnakeModel.setUp(false);
+                SnakeModel.setDown(false);
+                timer.stop();
+
+            }
+            if (SnakeModel.isRight()) {
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
+                }
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    if (r == 0) {
+                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] + 25, r);
+                    } else {
+                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
+                    }
+                    if (SnakeModel.getSnakeXlength()[r] > 950) {
+                        SnakeModel.setSnakeXlength(45, r);
+                    }
+                }
+                //board.repaint();
+            }
+            if (SnakeModel.isLeft()) {
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
+                }
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    if (r == 0) {
+                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] - 25, r);
+                    } else {
+                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
+                    }
+                    if (SnakeModel.getSnakeXlength()[r] < 20) {
+                        SnakeModel.setSnakeXlength(925, r);
+                    }
+                }
+                //board.repaint();
+            }
+
+            if (SnakeModel.isUp()) {
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
+                }
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    if (r == 0) {
+                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] - 25, r);
+                    } else {
+                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
+                    }
+                    if (SnakeModel.getSnakeYlength()[r] < 76) {
+                        SnakeModel.setSnakeYlength(726, r);
+                    }
+                }
+                //board.repaint();
+            }
+            if (SnakeModel.isDown()) {
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
+                }
+                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                    if (r == 0) {
+                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] + 25, r);
+                    } else {
+                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
+                    }
+                    if (SnakeModel.getSnakeYlength()[r] > 750) {
+                        SnakeModel.setSnakeYlength(76, r);
+                    }
+                }
+                //board.repaint();
+            }
+        } else{
             timer.stop();
-
-        }
-        if (SnakeModel.isRight()) {
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
-            }
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                if (r == 0) {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] + 25, r);
-                } else {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
-                }
-                if (SnakeModel.getSnakeXlength()[r] > 950) {
-                    SnakeModel.setSnakeXlength(45, r);
-                }
-            }
-            //board.repaint();
-        }
-        if (SnakeModel.isLeft()) {
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
-            }
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                if (r == 0) {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] - 25, r);
-                } else {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
-                }
-                if (SnakeModel.getSnakeXlength()[r] < 20) {
-                    SnakeModel.setSnakeXlength(925, r);
-                }
-            }
-            //board.repaint();
         }
 
-        if (SnakeModel.isUp()) {
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
-            }
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                if (r == 0) {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] - 25, r);
-                } else {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
-                }
-                if (SnakeModel.getSnakeYlength()[r] < 76) {
-                    SnakeModel.setSnakeYlength(726, r);
-                }
-            }
-            //board.repaint();
-        }
-        if (SnakeModel.isDown()) {
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
-            }
-            for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                if (r == 0) {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] + 25, r);
-                } else {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
-                }
-                if (SnakeModel.getSnakeYlength()[r] > 750) {
-                    SnakeModel.setSnakeYlength(76, r);
-                }
-            }
-            //board.repaint();
-        }
-
-        if (stopped) {
-            timer.stop();
-        }
     }
 
     public static boolean deathCondition() {
