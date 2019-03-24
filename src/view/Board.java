@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -23,7 +24,7 @@ import javax.swing.Timer;
 import model.AppleModel;
 import model.SnakeModel;
 
-public class Board extends JPanel implements KeyListener {
+public class Board extends JPanel implements KeyListener, ActionListener {
 
     private ImageIcon snake_right_face;
     private ImageIcon snake_left_face;
@@ -52,7 +53,7 @@ public class Board extends JPanel implements KeyListener {
     private static List<Score> listOfHighScores = new ArrayList<>();
     
     private GameController controller = new GameController();
-    private final Timer timer = controller.getTimer();
+    private final Timer repaintTimer = new Timer(10, this);
 
     public Board() {
 
@@ -60,13 +61,11 @@ public class Board extends JPanel implements KeyListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         controller.runTimer(this);
-        timer.start();
+        //timer.start();
+        repaintTimer.start();
     }
 
-    @Override
-    public void repaint() {
-        super.repaint();
-    }
+
 
     @Override
     public void paint(Graphics g) {
@@ -239,7 +238,8 @@ public class Board extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         controller.runTimer(this);
-        timer.start();
+        repaintTimer.start();
+        //timer.start();
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             GameController.setMoves(GameController.getMoves() + 1);
             SnakeModel.setRight(true);
@@ -336,6 +336,12 @@ public class Board extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.repaint();
     }
 
 }

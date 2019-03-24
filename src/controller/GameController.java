@@ -73,7 +73,6 @@ public class GameController implements ActionListener {
             timer.stop();
 
         }
-
         if (SnakeModel.isRight()) {
             for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
                 SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
