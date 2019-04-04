@@ -1,8 +1,8 @@
 package view;
 
-import Utilities.saveAndLoad;
 import Utilities.Score;
 import Utilities.HighScores;
+import Utilities.SaveAndLoad;
 import controller.GameController;
 import java.awt.Color;
 import java.awt.Font;
@@ -53,6 +53,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private static List<Score> listOfHighScores = new ArrayList<>();
     
     private GameController controller = new GameController();
+    private SnakeModel snake = controller.getSnakeModel();
     private final Timer repaintTimer = new Timer(10, this);
 
     public Board() {
@@ -69,14 +70,14 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void paint(Graphics g) {
-        if (GameController.getMoves() == 0) {
-            SnakeModel.setSnakeXlength(45, 2);
-            SnakeModel.setSnakeXlength(70, 1);
-            SnakeModel.setSnakeXlength(95, 0);
+        if (controller.getMoves() == 0) {
+            snake.setSnakeXlength(45, 2);
+            snake.setSnakeXlength(70, 1);
+            snake.setSnakeXlength(95, 0);
 
-            SnakeModel.setSnakeYlength(101, 2);
-            SnakeModel.setSnakeYlength(101, 1);
-            SnakeModel.setSnakeYlength(101, 0);
+            snake.setSnakeYlength(101, 2);
+            snake.setSnakeYlength(101, 1);
+            snake.setSnakeYlength(101, 0);
 
         }
         //title image border
@@ -104,40 +105,40 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         //draw length
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
-        g.drawString("Length: " + SnakeModel.getLengthOfSnake(), 900, 30);
+        g.drawString("Length: " + snake.getLengthOfSnake(), 900, 30);
 
         //draw speed
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
-        double speed = 20000 / (double) (GameController.getDelay() - GameController.getSpeedFactor() * AppleModel.getTotalAmountOfEatenApples());
+        double speed = 20000 / (double) (controller.getDelay() - controller.getSpeedFactor() * AppleModel.getTotalAmountOfEatenApples());
         DecimalFormat df = new DecimalFormat("#.##");
         g.drawString("Speed: " + df.format(speed) + "%", 30, 30);
 
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
 
         snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-        snake_right_face.paintIcon(this, g, SnakeModel.getSnakeXlength()[0], SnakeModel.getSnakeYlength()[0]);
+        snake_right_face.paintIcon(this, g, snake.getSnakeXlength()[0], snake.getSnakeYlength()[0]);
 
-        for (int a = 0; a < SnakeModel.getLengthOfSnake(); a++) {
-            if (a == 0 && SnakeModel.isRight()) {
+        for (int a = 0; a < snake.getLengthOfSnake(); a++) {
+            if (a == 0 && snake.isRight()) {
                 snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-                snake_right_face.paintIcon(this, g, SnakeModel.getSnakeXlength()[a], SnakeModel.getSnakeYlength()[a]);
+                snake_right_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
             }
-            if (a == 0 && SnakeModel.isLeft()) {
+            if (a == 0 && snake.isLeft()) {
                 snake_left_face = new ImageIcon("src/images/snake_head_left_transparent.png");
-                snake_left_face.paintIcon(this, g, SnakeModel.getSnakeXlength()[a], SnakeModel.getSnakeYlength()[a]);
+                snake_left_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
             }
-            if (a == 0 && SnakeModel.isUp()) {
+            if (a == 0 && snake.isUp()) {
                 snake_up_face = new ImageIcon("src/images/snake_head_up_transparent.png");
-                snake_up_face.paintIcon(this, g, SnakeModel.getSnakeXlength()[a], SnakeModel.getSnakeYlength()[a]);
+                snake_up_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
             }
-            if (a == 0 && SnakeModel.isDown()) {
+            if (a == 0 && snake.isDown()) {
                 snake_down_face = new ImageIcon("src/images/snake_head_down_transparent.png");
-                snake_down_face.paintIcon(this, g, SnakeModel.getSnakeXlength()[a], SnakeModel.getSnakeYlength()[a]);
+                snake_down_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
             }
             if (a != 0) {
                 snake_torso = new ImageIcon("src/images/snake_torso_transparent.png");
-                snake_torso.paintIcon(this, g, SnakeModel.getSnakeXlength()[a], SnakeModel.getSnakeYlength()[a]);
+                snake_torso.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
             }
         }
         if (appleAmount == 0) {
@@ -149,13 +150,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         apple.paintIcon(this, g, appleX, appleY);
 
         if (isAppleEaten()) {
-            SnakeModel.setLengthOfSnake(SnakeModel.getLengthOfSnake() + 1);
+            snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
             appleAmount--;
             AppleModel.setTotalAmountOfEatenApples(AppleModel.getTotalAmountOfEatenApples() + 1);
         }
 
         //game over info
-        if (GameController.deathCondition()) {
+        if (controller.deathCondition()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 50));
             g.drawString("GAME OVER", 350, 350);
@@ -182,13 +183,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         }
 
-        if (GameController.getMoves() == 0 && snakeSave.exists()) {
+        if (controller.getMoves() == 0 && snakeSave.exists()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press 'L' to load game", 400, 350);
         }
 
-        if (GameController.isStopped() && !GameController.deathCondition()) {
+        if (controller.isStopped() && !controller.deathCondition()) {
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
@@ -227,7 +228,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     }
 
     public boolean isAppleEaten() {
-        return (SnakeModel.getSnakeXlength()[0] == appleX && SnakeModel.getSnakeYlength()[0] == appleY);
+        return (snake.getSnakeXlength()[0] == appleX && snake.getSnakeYlength()[0] == appleY);
     }
 
     @Override
@@ -241,77 +242,77 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         repaintTimer.start();
         //timer.start();
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            GameController.setMoves(GameController.getMoves() + 1);
-            SnakeModel.setRight(true);
-            if (!SnakeModel.isLeft()) {
-                SnakeModel.setRight(true);
+            controller.setMoves(controller.getMoves() + 1);
+            snake.setRight(true);
+            if (!snake.isLeft()) {
+                snake.setRight(true);
             } else {
-                SnakeModel.setRight(false);
-                SnakeModel.setLeft(true);
+                snake.setRight(false);
+                snake.setLeft(true);
             }
-            SnakeModel.setUp(false);
-            SnakeModel.setDown(false);
+            snake.setUp(false);
+            snake.setDown(false);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            GameController.setMoves(GameController.getMoves() + 1);
-            SnakeModel.setLeft(true);
-            if (!SnakeModel.isRight()) {
-                SnakeModel.setLeft(true);
+            controller.setMoves(controller.getMoves() + 1);
+            snake.setLeft(true);
+            if (!snake.isRight()) {
+                snake.setLeft(true);
             } else {
-                SnakeModel.setLeft(false);
-                SnakeModel.setRight(true);
+                snake.setLeft(false);
+                snake.setRight(true);
             }
-            SnakeModel.setUp(false);
-            SnakeModel.setDown(false);
+            snake.setUp(false);
+            snake.setDown(false);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            GameController.setMoves(GameController.getMoves() + 1);
-            SnakeModel.setDown(true);
-            if (!SnakeModel.isUp()) {
-                SnakeModel.setDown(true);
+            controller.setMoves(controller.getMoves() + 1);
+            snake.setDown(true);
+            if (!snake.isUp()) {
+                snake.setDown(true);
             } else {
-                SnakeModel.setDown(false);
-                SnakeModel.setUp(true);
+                snake.setDown(false);
+                snake.setUp(true);
             }
-            SnakeModel.setRight(false);
-            SnakeModel.setLeft(false);
+            snake.setRight(false);
+            snake.setLeft(false);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            GameController.setMoves(GameController.getMoves() + 1);
-            SnakeModel.setUp(true);
-            if (!SnakeModel.isDown()) {
-                SnakeModel.setUp(true);
+            controller.setMoves(controller.getMoves() + 1);
+            snake.setUp(true);
+            if (!snake.isDown()) {
+                snake.setUp(true);
             } else {
-                SnakeModel.setUp(false);
-                SnakeModel.setDown(true);
+                snake.setUp(false);
+                snake.setDown(true);
             }
-            SnakeModel.setRight(false);
-            SnakeModel.setLeft(false);
+            snake.setRight(false);
+            snake.setLeft(false);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (GameController.isStopped() == false) {
-                GameController.setStopped(true);
+            if (controller.isStopped() == false) {
+                controller.setStopped(true);
             } else {
-                GameController.setStopped(false);
+                controller.setStopped(false);
                 ActionEvent asd = null;
                 controller.actionPerformed(asd);
             }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_R) {
-            GameController.setMoves(0);
+            controller.setMoves(0);
             AppleModel.setTotalAmountOfEatenApples(0);
-            SnakeModel.setLengthOfSnake(3);
-            SnakeModel.setRight(true);
-            SnakeModel.setLeft(false);
-            SnakeModel.setUp(false);
-            SnakeModel.setDown(false);
+            snake.setLengthOfSnake(3);
+            snake.setRight(true);
+            snake.setLeft(false);
+            snake.setUp(false);
+            snake.setDown(false);
 
-            GameController.setStopped(false);
+            controller.setStopped(false);
             saveStatus = false;
             repaint();
             ActionEvent asd = null;
@@ -319,13 +320,14 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         }
 
-        if (GameController.getMoves() != 0 && !GameController.deathCondition() && GameController.isStopped() && e.getKeyCode() == KeyEvent.VK_S) {
-            saveAndLoad.saveGame();
+        if (controller.getMoves() != 0 && !controller.deathCondition() && controller.isStopped() && e.getKeyCode() == KeyEvent.VK_S) {
+            SaveAndLoad.saveGame(snake);
         }
 
-        if ((GameController.getMoves() == 0 || GameController.isStopped()) && e.getKeyCode() == KeyEvent.VK_L) {
-            saveAndLoad.loadGame();
-            GameController.setStopped(false);
+        if ((controller.getMoves() == 0 || controller.isStopped()) && e.getKeyCode() == KeyEvent.VK_L) {
+            this.snake = SaveAndLoad.loadGame();
+            controller.setStopped(false);
+            this.repaintTimer.start();
             this.appleAmount = 0;
             saveStatus = false;
             ActionEvent asd = null;

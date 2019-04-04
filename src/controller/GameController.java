@@ -9,29 +9,29 @@ import view.Board;
 
 public class GameController implements ActionListener {
 
-    private static int delay;
+    private int delay;
 
-    public static int getDelay() {
+    public int getDelay() {
         return delay;
     }
 
-    public static void setDelay(int delay) {
-        GameController.delay = delay;
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
-    private static final int speedFactor = 5;
+    private final int speedFactor = 5;
 
-    public static int getSpeedFactor() {
+    public int getSpeedFactor() {
         return speedFactor;
     }
 
-    private static int moves = 0;
+    private int moves = 0;
 
-    public static int getMoves() {
+    public int getMoves() {
         return moves;
     }
 
-    public static void setMoves(int moves) {
-        GameController.moves = moves;
+    public void setMoves(int moves) {
+        this.moves = moves;
     }
 
     private final Timer timer = new Timer(delay, this);
@@ -44,14 +44,20 @@ public class GameController implements ActionListener {
         timer.start();
         board.repaint();
     }
-    private static boolean stopped = false;
+    private boolean stopped = false;
 
-    public static boolean isStopped() {
+    public boolean isStopped() {
         return stopped;
     }
 
-    public static void setStopped(boolean stopped) {
-        GameController.stopped = stopped;
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+    
+    private SnakeModel snake = new SnakeModel();
+    
+    public SnakeModel getSnakeModel(){
+        return this.snake;
     }
 
     public GameController() {
@@ -68,74 +74,74 @@ public class GameController implements ActionListener {
             timer.setDelay(delay - speedFactor * AppleModel.getTotalAmountOfEatenApples());
             timer.start();
             if (gameOver) {
-                SnakeModel.setRight(false);
-                SnakeModel.setLeft(false);
-                SnakeModel.setUp(false);
-                SnakeModel.setDown(false);
+                snake.setRight(false);
+                snake.setLeft(false);
+                snake.setUp(false);
+                snake.setDown(false);
                 timer.stop();
 
             }
-            if (SnakeModel.isRight()) {
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
+            if (snake.isRight()) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    snake.setSnakeYlength(snake.getSnakeYlength()[r], r + 1);
                 }
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] + 25, r);
+                        snake.setSnakeXlength(snake.getSnakeXlength()[r] + 25, r);
                     } else {
-                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
+                        snake.setSnakeXlength(snake.getSnakeXlength()[r - 1], r);
                     }
-                    if (SnakeModel.getSnakeXlength()[r] > 950) {
-                        SnakeModel.setSnakeXlength(45, r);
+                    if (snake.getSnakeXlength()[r] > 950) {
+                        snake.setSnakeXlength(45, r);
                     }
                 }
                 //board.repaint();
             }
-            if (SnakeModel.isLeft()) {
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                    SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r], r + 1);
+            if (snake.isLeft()) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    snake.setSnakeYlength(snake.getSnakeYlength()[r], r + 1);
                 }
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r] - 25, r);
+                        snake.setSnakeXlength(snake.getSnakeXlength()[r] - 25, r);
                     } else {
-                        SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r - 1], r);
+                        snake.setSnakeXlength(snake.getSnakeXlength()[r - 1], r);
                     }
-                    if (SnakeModel.getSnakeXlength()[r] < 20) {
-                        SnakeModel.setSnakeXlength(925, r);
+                    if (snake.getSnakeXlength()[r] < 20) {
+                        snake.setSnakeXlength(925, r);
                     }
                 }
                 //board.repaint();
             }
 
-            if (SnakeModel.isUp()) {
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
+            if (snake.isUp()) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    snake.setSnakeXlength(snake.getSnakeXlength()[r], r + 1);
                 }
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] - 25, r);
+                        snake.setSnakeYlength(snake.getSnakeYlength()[r] - 25, r);
                     } else {
-                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
+                        snake.setSnakeYlength(snake.getSnakeYlength()[r - 1], r);
                     }
-                    if (SnakeModel.getSnakeYlength()[r] < 76) {
-                        SnakeModel.setSnakeYlength(726, r);
+                    if (snake.getSnakeYlength()[r] < 76) {
+                        snake.setSnakeYlength(726, r);
                     }
                 }
                 //board.repaint();
             }
-            if (SnakeModel.isDown()) {
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
-                    SnakeModel.setSnakeXlength(SnakeModel.getSnakeXlength()[r], r + 1);
+            if (snake.isDown()) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    snake.setSnakeXlength(snake.getSnakeXlength()[r], r + 1);
                 }
-                for (int r = SnakeModel.getLengthOfSnake() - 1; r >= 0; r--) {
+                for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r] + 25, r);
+                        snake.setSnakeYlength(snake.getSnakeYlength()[r] + 25, r);
                     } else {
-                        SnakeModel.setSnakeYlength(SnakeModel.getSnakeYlength()[r - 1], r);
+                        snake.setSnakeYlength(snake.getSnakeYlength()[r - 1], r);
                     }
-                    if (SnakeModel.getSnakeYlength()[r] > 750) {
-                        SnakeModel.setSnakeYlength(76, r);
+                    if (snake.getSnakeYlength()[r] > 750) {
+                        snake.setSnakeYlength(76, r);
                     }
                 }
                 //board.repaint();
@@ -146,12 +152,12 @@ public class GameController implements ActionListener {
 
     }
 
-    public static boolean deathCondition() {
+    public boolean deathCondition() {
         if (moves == 0) {
             return false;
         }
-        for (int i = 1; i <= SnakeModel.getLengthOfSnake() - 1; i++) {
-            if (SnakeModel.getSnakeXlength()[0] == SnakeModel.getSnakeXlength()[i] && SnakeModel.getSnakeYlength()[0] == SnakeModel.getSnakeYlength()[i]) {
+        for (int i = 1; i <= snake.getLengthOfSnake() - 1; i++) {
+            if (snake.getSnakeXlength()[0] == snake.getSnakeXlength()[i] && snake.getSnakeYlength()[0] == snake.getSnakeYlength()[i]) {
                 stopped = true;
                 return true;
             }

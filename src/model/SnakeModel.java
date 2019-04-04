@@ -2,69 +2,69 @@ package model;
 
 public class SnakeModel {
 
-    private static final int[] snakeXlength = new int[750];
-    private static final int[] snakeYlength = new int[750];
+    private final int[] snakeXlength = new int[750];
+    private final int[] snakeYlength = new int[750];
 
-    private static boolean left = false;
-    private static boolean right = false;
-    private static boolean up = false;
-    private static boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean up = false;
+    private boolean down = false;
 
-    private static int lengthOfSnake = 3;
+    private int lengthOfSnake = 3;
 
-    public static int[] getSnakeXlength() {
+    public int[] getSnakeXlength() {
         return snakeXlength;
     }
 
-    public static void setSnakeXlength(int snakeXlength, int i) {
-        SnakeModel.snakeXlength[i] = snakeXlength;
+    public void setSnakeXlength(int snakeXlength, int i) {
+        this.snakeXlength[i] = snakeXlength;
     }
 
-    public static int[] getSnakeYlength() {
+    public int[] getSnakeYlength() {
         return snakeYlength;
     }
     
-    public static void setSnakeYlength(int snakeYlength, int i) {
-        SnakeModel.snakeYlength[i] = snakeYlength;
+    public void setSnakeYlength(int snakeYlength, int i) {
+        this.snakeYlength[i] = snakeYlength;
     }
 
-    public static boolean isLeft() {
+    public boolean isLeft() {
         return left;
     }
     
-     public static void setLeft(boolean left) {
-        SnakeModel.left = left;
+     public void setLeft(boolean left) {
+        this.left = left;
     }
 
-    public static boolean isRight() {
+    public boolean isRight() {
         return right;
     }
     
-    public static void setRight(boolean right) {
-        SnakeModel.right = right;
+    public void setRight(boolean right) {
+        this.right = right;
     }
 
-    public static boolean isUp() {
+    public boolean isUp() {
         return up;
     }
     
-    public static void setUp(boolean up) {
-        SnakeModel.up = up;
+    public void setUp(boolean up) {
+        this.up = up;
     }
 
-    public static boolean isDown() {
+    public boolean isDown() {
         return down;
     }
     
-    public static void setDown(boolean down) {
-        SnakeModel.down = down;
+    public void setDown(boolean down) {
+        this.down = down;
     }
 
-    public static int getLengthOfSnake() {
+    public int getLengthOfSnake() {
         return lengthOfSnake;
     }
     
-    public static void setLengthOfSnake(int lengthOfSnake) {
-        SnakeModel.lengthOfSnake = lengthOfSnake;
+    public void setLengthOfSnake(int lengthOfSnake) {
+        this.lengthOfSnake = lengthOfSnake;
     }
 }

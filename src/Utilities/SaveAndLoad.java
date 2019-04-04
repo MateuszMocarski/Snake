@@ -10,11 +10,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import model.AppleModel;
 import model.SnakeModel;
-import view.Board;
 
-public class saveAndLoad {
+public class SaveAndLoad {
 
-    public static void saveGame() {
+    public static void saveGame(SnakeModel snake) {
+        GameController controller = new GameController();
         BufferedWriter writer = null;
         try {
             File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
@@ -28,30 +28,30 @@ public class saveAndLoad {
                 ex.getMessage();
             }
             writer = new BufferedWriter(new FileWriter(snakeSave));
-            writer.write(Integer.toString(GameController.getMoves()));
+            writer.write(Integer.toString(controller.getMoves()));
             writer.newLine();
-            writer.write(Integer.toString(SnakeModel.getLengthOfSnake()));
+            writer.write(Integer.toString(snake.getLengthOfSnake()));
             writer.newLine();
             writer.write(Integer.toString(AppleModel.getTotalAmountOfEatenApples()));
             writer.newLine();
-            if (SnakeModel.isRight()) {
+            if (snake.isRight()) {
                 writer.write("Right");
                 writer.newLine();
             }
-            if (SnakeModel.isLeft()) {
+            if (snake.isLeft()) {
                 writer.write("Left");
                 writer.newLine();
             }
-            if (SnakeModel.isUp()) {
+            if (snake.isUp()) {
                 writer.write("Up");
                 writer.newLine();
             }
-            if (SnakeModel.isDown()) {
+            if (snake.isDown()) {
                 writer.write("Down");
                 writer.newLine();
             }
-            for (int i = 0; i <= SnakeModel.getLengthOfSnake() - 1; i++) {
-                writer.write(Integer.toString(SnakeModel.getSnakeXlength()[i]) + "|" + Integer.toString(SnakeModel.getSnakeYlength()[i]));
+            for (int i = 0; i <= snake.getLengthOfSnake() - 1; i++) {
+                writer.write(Integer.toString(snake.getSnakeXlength()[i]) + "|" + Integer.toString(snake.getSnakeYlength()[i]));
                 writer.newLine();
             }
             writer.close();
@@ -60,46 +60,48 @@ public class saveAndLoad {
         }
     }
 
-    public static void loadGame() {
+    public static SnakeModel loadGame() {
+        GameController controller = new GameController();
+        SnakeModel snake = controller.getSnakeModel();
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
         if (snakeSave.exists()) {
             try {
                 FileReader fr = new FileReader(snakeSave);
                 BufferedReader br = new BufferedReader(fr);
-                GameController.setMoves(Integer.parseInt(br.readLine()));
-                SnakeModel.setLengthOfSnake(Integer.parseInt(br.readLine()));
+                controller.setMoves(Integer.parseInt(br.readLine()));
+                snake.setLengthOfSnake(Integer.parseInt(br.readLine()));
                 AppleModel.setTotalAmountOfEatenApples(Integer.parseInt(br.readLine()));
                 String direction = br.readLine();
                 if (direction.equals("Right")) {
-                    SnakeModel.setRight(true);
-                    SnakeModel.setLeft(false);
-                    SnakeModel.setUp(false);
-                    SnakeModel.setDown(false);
+                    snake.setRight(true);
+                    snake.setLeft(false);
+                    snake.setUp(false);
+                    snake.setDown(false);
                 }
                 if (direction.equals("Left")) {
-                    SnakeModel.setRight(false);
-                    SnakeModel.setLeft(true);
-                    SnakeModel.setUp(false);
-                    SnakeModel.setDown(false);
+                    snake.setRight(false);
+                    snake.setLeft(true);
+                    snake.setUp(false);
+                    snake.setDown(false);
                 }
                 if (direction.equals("Up")) {
-                    SnakeModel.setRight(false);
-                    SnakeModel.setLeft(false);
-                    SnakeModel.setUp(true);
-                    SnakeModel.setDown(false);
+                    snake.setRight(false);
+                    snake.setLeft(false);
+                    snake.setUp(true);
+                    snake.setDown(false);
                 }
                 if (direction.equals("Down")) {
-                    SnakeModel.setRight(false);
-                    SnakeModel.setLeft(false);
-                    SnakeModel.setUp(false);
-                    SnakeModel.setDown(true);
+                    snake.setRight(false);
+                    snake.setLeft(false);
+                    snake.setUp(false);
+                    snake.setDown(true);
                 }
 
-                for (int i = 0; i <= SnakeModel.getLengthOfSnake() - 1; i++) {
+                for (int i = 0; i <= snake.getLengthOfSnake() - 1; i++) {
                     String coordinates = br.readLine();
                     String[] arrayOfCoordinates = coordinates.split("\\|");
-                    SnakeModel.setSnakeXlength(Integer.parseInt(arrayOfCoordinates[0]), i);
-                    SnakeModel.setSnakeYlength(Integer.parseInt(arrayOfCoordinates[1]), i);
+                    snake.setSnakeXlength(Integer.parseInt(arrayOfCoordinates[0]), i);
+                    snake.setSnakeYlength(Integer.parseInt(arrayOfCoordinates[1]), i);
 
                 }
             } catch (FileNotFoundException ex) {
@@ -108,5 +110,6 @@ public class saveAndLoad {
                 ex.getMessage();
             }
         }
+        return snake;
     }
 }
