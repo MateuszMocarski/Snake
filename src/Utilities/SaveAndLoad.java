@@ -13,8 +13,7 @@ import model.SnakeModel;
 
 public class SaveAndLoad {
 
-    public static void saveGame(SnakeModel snake) {
-        GameController controller = new GameController();
+    public static void saveGame(SnakeModel snake, GameController controller) {
         BufferedWriter writer = null;
         try {
             File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
@@ -60,8 +59,7 @@ public class SaveAndLoad {
         }
     }
 
-    public static SnakeModel loadGame() {
-        GameController controller = new GameController();
+    public static SnakeModel loadGame(GameController controller) {
         SnakeModel snake = controller.getSnakeModel();
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
         if (snakeSave.exists()) {

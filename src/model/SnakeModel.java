@@ -2,8 +2,8 @@ package model;
 
 public class SnakeModel {
 
-    private final int[] snakeXlength = new int[750];
-    private final int[] snakeYlength = new int[750];
+    private final int[] snakeXlength = new int[83];
+    private final int[] snakeYlength = new int[83];
 
     private boolean left = false;
     private boolean right = false;

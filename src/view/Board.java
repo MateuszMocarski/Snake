@@ -321,13 +321,12 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
 
         if (controller.getMoves() != 0 && !controller.deathCondition() && controller.isStopped() && e.getKeyCode() == KeyEvent.VK_S) {
-            SaveAndLoad.saveGame(snake);
+            SaveAndLoad.saveGame(snake, controller);
         }
 
         if ((controller.getMoves() == 0 || controller.isStopped()) && e.getKeyCode() == KeyEvent.VK_L) {
-            this.snake = SaveAndLoad.loadGame();
+            this.snake = SaveAndLoad.loadGame(controller);
             controller.setStopped(false);
-            this.repaintTimer.start();
             this.appleAmount = 0;
             saveStatus = false;
             ActionEvent asd = null;
