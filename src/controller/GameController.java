@@ -92,7 +92,7 @@ public class GameController implements ActionListener {
                         snake.setSnakeXlength(snake.getSnakeXlength()[r - 1], r);
                     }
                     if (snake.getSnakeXlength()[r] > 950) {
-                        snake.setSnakeXlength(45, r);
+                        snake.setSnakeXlength(20, r);
                     }
                 }
                 //board.repaint();
@@ -108,7 +108,7 @@ public class GameController implements ActionListener {
                         snake.setSnakeXlength(snake.getSnakeXlength()[r - 1], r);
                     }
                     if (snake.getSnakeXlength()[r] < 20) {
-                        snake.setSnakeXlength(925, r);
+                        snake.setSnakeXlength(950, r);
                     }
                 }
                 //board.repaint();
