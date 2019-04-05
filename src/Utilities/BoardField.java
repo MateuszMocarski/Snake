@@ -6,6 +6,13 @@ public class BoardField {
     private int BoardFieldX;
     private int BoardFieldY;
 
+    public BoardField(int BoardFieldX, int BoardFieldY) {
+        this.BoardFieldX = BoardFieldX;
+        this.BoardFieldY = BoardFieldY;
+    }
+    
+    
+
     public int getBoardFieldX() {
         return BoardFieldX;
     }
@@ -43,10 +50,7 @@ public class BoardField {
         if (this.BoardFieldX != other.BoardFieldX) {
             return false;
         }
-        if (this.BoardFieldY != other.BoardFieldY) {
-            return false;
-        }
-        return true;
+        return this.BoardFieldY == other.BoardFieldY;
     }
     
     

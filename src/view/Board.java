@@ -117,28 +117,28 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
 
         snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-        snake_right_face.paintIcon(this, g, snake.getSnakeXlength()[0], snake.getSnakeYlength()[0]);
+        snake_right_face.paintIcon(this, g, snake.getSnakeXlength(0), snake.getSnakeYlength(0));
 
         for (int a = 0; a < snake.getLengthOfSnake(); a++) {
             if (a == 0 && snake.isRight()) {
                 snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-                snake_right_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
+                snake_right_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
             }
             if (a == 0 && snake.isLeft()) {
                 snake_left_face = new ImageIcon("src/images/snake_head_left_transparent.png");
-                snake_left_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
+                snake_left_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
             }
             if (a == 0 && snake.isUp()) {
                 snake_up_face = new ImageIcon("src/images/snake_head_up_transparent.png");
-                snake_up_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
+                snake_up_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
             }
             if (a == 0 && snake.isDown()) {
                 snake_down_face = new ImageIcon("src/images/snake_head_down_transparent.png");
-                snake_down_face.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
+                snake_down_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
             }
             if (a != 0) {
                 snake_torso = new ImageIcon("src/images/snake_torso_transparent.png");
-                snake_torso.paintIcon(this, g, snake.getSnakeXlength()[a], snake.getSnakeYlength()[a]);
+                snake_torso.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
             }
         }
         if (appleAmount == 0) {
@@ -228,7 +228,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     }
 
     public boolean isAppleEaten() {
-        return (snake.getSnakeXlength()[0] == appleX && snake.getSnakeYlength()[0] == appleY);
+        return (snake.getSnakeXlength(0) == appleX && snake.getSnakeYlength(0) == appleY);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class SaveAndLoad {
                 writer.newLine();
             }
             for (int i = 0; i <= snake.getLengthOfSnake() - 1; i++) {
-                writer.write(Integer.toString(snake.getSnakeXlength()[i]) + "|" + Integer.toString(snake.getSnakeYlength()[i]));
+                writer.write(Integer.toString(snake.getSnakeXlength(i)) + "|" + Integer.toString(snake.getSnakeYlength(i)));
                 writer.newLine();
             }
             writer.close();
