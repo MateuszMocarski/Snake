@@ -31,7 +31,7 @@ public class SaveAndLoad {
             writer.newLine();
             writer.write(Integer.toString(snake.getLengthOfSnake()));
             writer.newLine();
-            writer.write(Integer.toString(AppleModel.getTotalAmountOfEatenApples()));
+            writer.write(Integer.toString(controller.getTotalAmountOfEatenApples()));
             writer.newLine();
             if (snake.isRight()) {
                 writer.write("Right");
@@ -68,7 +68,7 @@ public class SaveAndLoad {
                 BufferedReader br = new BufferedReader(fr);
                 controller.setMoves(Integer.parseInt(br.readLine()));
                 snake.setLengthOfSnake(Integer.parseInt(br.readLine()));
-                AppleModel.setTotalAmountOfEatenApples(Integer.parseInt(br.readLine()));
+                controller.setTotalAmountOfEatenApples(Integer.parseInt(br.readLine()));
                 String direction = br.readLine();
                 if (direction.equals("Right")) {
                     snake.setRight(true);

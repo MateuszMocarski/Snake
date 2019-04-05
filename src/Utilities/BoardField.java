@@ -1,8 +1,7 @@
-
 package Utilities;
 
 public class BoardField {
-    
+
     private int BoardFieldX;
     private int BoardFieldY;
 
@@ -10,8 +9,6 @@ public class BoardField {
         this.BoardFieldX = BoardFieldX;
         this.BoardFieldY = BoardFieldY;
     }
-    
-    
 
     public int getBoardFieldX() {
         return BoardFieldX;
@@ -52,6 +49,5 @@ public class BoardField {
         }
         return this.BoardFieldY == other.BoardFieldY;
     }
-    
-    
+
 }

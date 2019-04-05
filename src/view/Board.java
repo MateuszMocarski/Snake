@@ -34,13 +34,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     public static List<Score> getListOfHighScores() {
         return listOfHighScores;
     }
-    
+
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private AppleModel appleModel;
     private int appleAmount = 0;
     private ImageIcon apple;
-    private int appleX;
-    private int appleY;
+    
 
     private ImageIcon snake_torso;
 
@@ -51,7 +51,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private boolean saveStatus = false;
 
     private static List<Score> listOfHighScores = new ArrayList<>();
-    
+
     private GameController controller = new GameController();
     private SnakeModel snake = controller.getSnakeModel();
     private final Timer repaintTimer = new Timer(10, this);
@@ -62,11 +62,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         controller.runTimer(this);
-        //timer.start();
         repaintTimer.start();
     }
-
-
 
     @Override
     public void paint(Graphics g) {
@@ -97,7 +94,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         g.fillRect(20, 76, 950, 675);
 
         //draw score
-        totalScore = 5 * AppleModel.getTotalAmountOfEatenApples();
+        totalScore = 5 * controller.getTotalAmountOfEatenApples();
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
         g.drawString("Score: " + totalScore, 900, 50);
@@ -110,7 +107,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         //draw speed
         g.setColor(Color.WHITE);
         g.setFont(new Font("arial", Font.PLAIN, 14));
-        double speed = 20000 / (double) (controller.getDelay() - controller.getSpeedFactor() * AppleModel.getTotalAmountOfEatenApples());
+        double speed = 20000 / (double) (controller.getDelay() - controller.getSpeedFactor() * controller.getTotalAmountOfEatenApples());
         DecimalFormat df = new DecimalFormat("#.##");
         g.drawString("Speed: " + df.format(speed) + "%", 30, 30);
 
@@ -142,17 +139,20 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             }
         }
         if (appleAmount == 0) {
-            appleX = randomizeAppleXLocation();
-            appleY = randomizeAppleYLocation();
+            appleModel = new AppleModel();
             appleAmount++;
+            if(controller.appleNotOnSnake(appleModel)){
+                appleAmount--;
+            }
+            
         }
         apple = new ImageIcon("src/images/apple_transparent.png");
-        apple.paintIcon(this, g, appleX, appleY);
+        apple.paintIcon(this, g, appleModel.getAppleLocation().getBoardFieldX(), appleModel.getAppleLocation().getBoardFieldY());
 
-        if (isAppleEaten()) {
+        if (controller.isAppleEaten(appleModel)) {
             snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
             appleAmount--;
-            AppleModel.setTotalAmountOfEatenApples(AppleModel.getTotalAmountOfEatenApples() + 1);
+            controller.setTotalAmountOfEatenApples(controller.getTotalAmountOfEatenApples() + 1);
         }
 
         //game over info
@@ -211,25 +211,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
     }
 
-    public int randomizeAppleXLocation() {
-        int locationX = 45;
-        Random rand = new Random();
-        int number = rand.nextInt(36);
-        locationX += 25 * number;
-        return locationX;
-    }
-
-    public int randomizeAppleYLocation() {
-        int locationY = 101;
-        Random rand = new Random();
-        int number = rand.nextInt(26);
-        locationY += 25 * number;
-        return locationY;
-    }
-
-    public boolean isAppleEaten() {
-        return (snake.getSnakeXlength(0) == appleX && snake.getSnakeYlength(0) == appleY);
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -240,7 +221,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     public void keyPressed(KeyEvent e) {
         controller.runTimer(this);
         repaintTimer.start();
-        //timer.start();
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             controller.setMoves(controller.getMoves() + 1);
             snake.setRight(true);
@@ -305,7 +285,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         if (e.getKeyCode() == KeyEvent.VK_R) {
             controller.setMoves(0);
-            AppleModel.setTotalAmountOfEatenApples(0);
+            controller.setTotalAmountOfEatenApples(0);
             snake.setLengthOfSnake(3);
             snake.setRight(true);
             snake.setLeft(false);
@@ -339,7 +319,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     }
 
-    
     @Override
     public void actionPerformed(ActionEvent e) {
         this.repaint();
