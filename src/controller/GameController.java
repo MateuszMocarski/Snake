@@ -91,6 +91,7 @@ public class GameController implements ActionListener {
                     } else {
                         snake.setSnakeXlength(snake.getSnakeXlength(r-1), r);
                     }
+
                     if (snake.getSnakeXlength(r) > 950) {
                         snake.setSnakeXlength(20, r);
                     }
