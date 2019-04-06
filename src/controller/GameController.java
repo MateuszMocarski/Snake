@@ -94,13 +94,13 @@ public class GameController implements ActionListener {
                 }
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        snake.setSnakeXlength(snake.getSnakeXlength(r) + 25, r);
+                        snake.setSnakeXlength(snake.getSnakeXlength(r) + 1, r);
                     } else {
                         snake.setSnakeXlength(snake.getSnakeXlength(r - 1), r);
                     }
 
-                    if (snake.getSnakeXlength(r) > 950) {
-                        snake.setSnakeXlength(20, r);
+                    if (snake.getSnakeXlength(r) > 37) {
+                        snake.setSnakeXlength(0, r);
                     }
                 }
             }
@@ -110,12 +110,12 @@ public class GameController implements ActionListener {
                 }
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        snake.setSnakeXlength(snake.getSnakeXlength(r) - 25, r);
+                        snake.setSnakeXlength(snake.getSnakeXlength(r) - 1, r);
                     } else {
                         snake.setSnakeXlength(snake.getSnakeXlength(r - 1), r);
                     }
-                    if (snake.getSnakeXlength(r) < 20) {
-                        snake.setSnakeXlength(950, r);
+                    if (snake.getSnakeXlength(r) < 0) {
+                        snake.setSnakeXlength(37, r);
                     }
                 }
             }
@@ -126,12 +126,12 @@ public class GameController implements ActionListener {
                 }
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        snake.setSnakeYlength(snake.getSnakeYlength(r) - 25, r);
+                        snake.setSnakeYlength(snake.getSnakeYlength(r) - 1, r);
                     } else {
                         snake.setSnakeYlength(snake.getSnakeYlength(r - 1), r);
                     }
-                    if (snake.getSnakeYlength(r) < 76) {
-                        snake.setSnakeYlength(726, r);
+                    if (snake.getSnakeYlength(r) < 0) {
+                        snake.setSnakeYlength(26, r);
                     }
                 }
             }
@@ -141,12 +141,12 @@ public class GameController implements ActionListener {
                 }
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     if (r == 0) {
-                        snake.setSnakeYlength(snake.getSnakeYlength(r) + 25, r);
+                        snake.setSnakeYlength(snake.getSnakeYlength(r) + 1, r);
                     } else {
                         snake.setSnakeYlength(snake.getSnakeYlength(r - 1), r);
                     }
-                    if (snake.getSnakeYlength(r) > 750) {
-                        snake.setSnakeYlength(76, r);
+                    if (snake.getSnakeYlength(r) > 26) {
+                        snake.setSnakeYlength(0, r);
                     }
                 }
             }

@@ -17,7 +17,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -40,7 +39,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private AppleModel appleModel;
     private int appleAmount = 0;
     private ImageIcon apple;
-    
 
     private ImageIcon snake_torso;
 
@@ -68,13 +66,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     @Override
     public void paint(Graphics g) {
         if (controller.getMoves() == 0) {
-            snake.setSnakeXlength(45, 2);
-            snake.setSnakeXlength(70, 1);
-            snake.setSnakeXlength(95, 0);
+            snake.setSnakeXlength(1, 2);
+            snake.setSnakeXlength(2, 1);
+            snake.setSnakeXlength(3, 0);
 
-            snake.setSnakeYlength(101, 2);
-            snake.setSnakeYlength(101, 1);
-            snake.setSnakeYlength(101, 0);
+            snake.setSnakeYlength(1, 2);
+            snake.setSnakeYlength(1, 1);
+            snake.setSnakeYlength(1, 0);
 
         }
         //title image border
@@ -114,40 +112,40 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         File snakeSave = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\save.txt");
 
         snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-        snake_right_face.paintIcon(this, g, snake.getSnakeXlength(0), snake.getSnakeYlength(0));
+        snake_right_face.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(0)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(0)));
 
         for (int a = 0; a < snake.getLengthOfSnake(); a++) {
             if (a == 0 && snake.isRight()) {
                 snake_right_face = new ImageIcon("src/images/snake_head_right_transparent.png");
-                snake_right_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
+                snake_right_face.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
             if (a == 0 && snake.isLeft()) {
                 snake_left_face = new ImageIcon("src/images/snake_head_left_transparent.png");
-                snake_left_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
+                snake_left_face.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
             if (a == 0 && snake.isUp()) {
                 snake_up_face = new ImageIcon("src/images/snake_head_up_transparent.png");
-                snake_up_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
+                snake_up_face.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
             if (a == 0 && snake.isDown()) {
                 snake_down_face = new ImageIcon("src/images/snake_head_down_transparent.png");
-                snake_down_face.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
+                snake_down_face.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
             if (a != 0) {
                 snake_torso = new ImageIcon("src/images/snake_torso_transparent.png");
-                snake_torso.paintIcon(this, g, snake.getSnakeXlength(a), snake.getSnakeYlength(a));
+                snake_torso.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
         }
         if (appleAmount == 0) {
             appleModel = new AppleModel();
             appleAmount++;
-            if(controller.appleNotOnSnake(appleModel)){
+            if (controller.appleNotOnSnake(appleModel)) {
                 appleAmount--;
             }
-            
+
         }
         apple = new ImageIcon("src/images/apple_transparent.png");
-        apple.paintIcon(this, g, appleModel.getAppleLocation().getBoardFieldX(), appleModel.getAppleLocation().getBoardFieldY());
+        apple.paintIcon(this, g, this.fieldToCoordTranslatorX(appleModel.getAppleLocation().getBoardFieldX()), this.fieldToCoordTranslatorY(appleModel.getAppleLocation().getBoardFieldY()));
 
         if (controller.isAppleEaten(appleModel)) {
             snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
@@ -210,7 +208,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.drawString("Press SPACE to resume game", 360, 425);
         }
     }
-
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -322,6 +319,14 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         this.repaint();
+    }
+
+    public int fieldToCoordTranslatorX(int bf) {
+        return 20 + bf * 25;
+    }
+
+    public int fieldToCoordTranslatorY(int bf) {
+        return 76 + bf * 25;
     }
 
 }

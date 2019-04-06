@@ -22,17 +22,17 @@ public class AppleModel {
     }
 
     public BoardField randomizeAppleLocation() {
-        int locationX = 45;
-        int locationY = 101;
-        BoardField appleLocation = new BoardField(95, 176);
+        int locationX = 0;
+        int locationY = 0;
+        BoardField appleLocation = new BoardField(0, 0);
 
         Random rand = new Random();
-        int number = rand.nextInt(36);
-        locationX += 25 * number;
+        int number = rand.nextInt(37);
+        locationX += number;
         appleLocation.setBoardFieldX(locationX);
 
         number = rand.nextInt(26);
-        locationY += 25 * number;
+        locationY += number;
         appleLocation.setBoardFieldY(locationY);
 
         return appleLocation;
