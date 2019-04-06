@@ -1,15 +1,18 @@
 package model;
 
 import Utilities.BoardField;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SnakeModel {
 
-    private final BoardField[] snakeLength = {new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0), new BoardField(0, 0)};
+    private final List<BoardField> snakeLength = new ArrayList<>();
 
-    public void snakeLengthInit() {
-        for (BoardField bf : snakeLength) {
-            bf = new BoardField(0, 0);
-        }
+    public SnakeModel(){
+        this.getSnakeLength().add(new BoardField(3, 1));
+        this.getSnakeLength().add(new BoardField(2, 1));
+        this.getSnakeLength().add(new BoardField(1, 1));
+        this.getSnakeLength().add(new BoardField(0, 0));
     }
 
     private boolean left = false;
@@ -18,26 +21,30 @@ public class SnakeModel {
     private boolean down = false;
 
     private int lengthOfSnake = 3;
-
-    public BoardField[] getSnakeLength() {
+    
+    public List<BoardField> getSnakeLength() {
         return snakeLength;
+    }
+    
+    public void setSnakeLength(int i, BoardField bf){
+        this.snakeLength.set(i, bf);
     }
 
     
     public int getSnakeXlength(int r) {
-        return snakeLength[r].getBoardFieldX();
+        return snakeLength.get(r).getBoardFieldX();
     }
 
     public void setSnakeXlength(int snakeXlength, int i) {
-        this.snakeLength[i].setBoardFieldX(snakeXlength);
+        this.snakeLength.get(i).setBoardFieldX(snakeXlength);
     }
 
     public int getSnakeYlength(int r) {
-        return snakeLength[r].getBoardFieldY();
+        return snakeLength.get(r).getBoardFieldY();
     }
 
     public void setSnakeYlength(int snakeYlength, int i) {
-        this.snakeLength[i].setBoardFieldY(snakeYlength);
+        this.snakeLength.get(i).setBoardFieldY(snakeYlength);
     }
 
     public boolean isLeft() {

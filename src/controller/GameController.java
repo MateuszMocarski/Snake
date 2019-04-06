@@ -1,5 +1,6 @@
 package controller;
 
+import Utilities.BoardField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
@@ -14,11 +15,12 @@ public class GameController implements ActionListener {
     public int getDelay() {
         return delay;
     }
-    private  int totalAmountOfEatenApples = 0;
-    
+    private int totalAmountOfEatenApples = 0;
+
     public int getTotalAmountOfEatenApples() {
         return totalAmountOfEatenApples;
     }
+
     public void setTotalAmountOfEatenApples(int totalAmountOfEatenApples) {
         this.totalAmountOfEatenApples = totalAmountOfEatenApples;
     }
@@ -66,6 +68,10 @@ public class GameController implements ActionListener {
 
     public SnakeModel getSnakeModel() {
         return this.snake;
+    }
+    
+    public void setNewSnakeModel(){
+        snake = new SnakeModel();
     }
 
     public GameController() {
@@ -168,21 +174,26 @@ public class GameController implements ActionListener {
         }
         return false;
     }
-    
+
     public boolean isAppleEaten(AppleModel appleModel) {
-        return (snake.getSnakeLength()[0].equals(appleModel.getAppleLocation()));
+        System.out.println(snake.getSnakeLength().size());
+        return (snake.getSnakeLength().get(0).equals(appleModel.getAppleLocation()));
     }
-    
-    public boolean appleNotOnSnake(AppleModel appleModel){
-        if (moves == 0){
+
+    public boolean appleNotOnSnake(AppleModel appleModel) {
+        if (moves == 0) {
             return false;
         }
-        for(int i = 1; i<= snake.getLengthOfSnake() - 1; i++){
-            if(snake.getSnakeLength()[i].equals(appleModel.getAppleLocation())){
+        for (int i = 1; i <= snake.getLengthOfSnake() - 1; i++) {
+            if (snake.getSnakeLength().get(i).equals(appleModel.getAppleLocation())) {
                 return true;
-            }       
+            }
         }
         return false;
+    }
+    
+    public void appleEaten(){
+        snake.getSnakeLength().add(new BoardField(0,0));
     }
 
 }

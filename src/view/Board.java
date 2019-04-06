@@ -1,5 +1,6 @@
 package view;
 
+import Utilities.BoardField;
 import Utilities.Score;
 import Utilities.HighScores;
 import Utilities.SaveAndLoad;
@@ -46,6 +47,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private int totalScore;
 
+    private boolean reset = false;
+    
     private boolean saveStatus = false;
 
     private static List<Score> listOfHighScores = new ArrayList<>();
@@ -65,15 +68,13 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void paint(Graphics g) {
-        if (controller.getMoves() == 0) {
-            snake.setSnakeXlength(1, 2);
-            snake.setSnakeXlength(2, 1);
-            snake.setSnakeXlength(3, 0);
-
-            snake.setSnakeYlength(1, 2);
-            snake.setSnakeYlength(1, 1);
-            snake.setSnakeYlength(1, 0);
-
+        if(controller.getMoves()==-1){
+            snake.getSnakeLength().clear();
+            snake.getSnakeLength().add(new BoardField(3, 1));
+            snake.getSnakeLength().add(new BoardField(2, 1));
+            snake.getSnakeLength().add(new BoardField(1, 1));
+            snake.getSnakeLength().add(new BoardField(0, 0));
+            controller.setMoves(0);
         }
         //title image border
         g.setColor(Color.white);
@@ -148,7 +149,8 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         apple.paintIcon(this, g, this.fieldToCoordTranslatorX(appleModel.getAppleLocation().getBoardFieldX()), this.fieldToCoordTranslatorY(appleModel.getAppleLocation().getBoardFieldY()));
 
         if (controller.isAppleEaten(appleModel)) {
-            snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
+            controller.appleEaten();
+            snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);    
             appleAmount--;
             controller.setTotalAmountOfEatenApples(controller.getTotalAmountOfEatenApples() + 1);
         }
@@ -181,7 +183,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         }
 
-        if (controller.getMoves() == 0 && snakeSave.exists()) {
+        if (controller.getMoves() == -1 && snakeSave.exists()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press 'L' to load game", 400, 350);
@@ -281,14 +283,14 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_R) {
-            controller.setMoves(0);
+            controller.setMoves(-1);
             controller.setTotalAmountOfEatenApples(0);
             snake.setLengthOfSnake(3);
             snake.setRight(true);
             snake.setLeft(false);
             snake.setUp(false);
             snake.setDown(false);
-
+            reset = true;
             controller.setStopped(false);
             saveStatus = false;
             repaint();

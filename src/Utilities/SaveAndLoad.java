@@ -94,14 +94,13 @@ public class SaveAndLoad {
                     snake.setUp(false);
                     snake.setDown(true);
                 }
-
+                    snake.getSnakeLength().clear();
                 for (int i = 0; i <= snake.getLengthOfSnake() - 1; i++) {
                     String coordinates = br.readLine();
                     String[] arrayOfCoordinates = coordinates.split("\\|");
-                    snake.setSnakeXlength(Integer.parseInt(arrayOfCoordinates[0]), i);
-                    snake.setSnakeYlength(Integer.parseInt(arrayOfCoordinates[1]), i);
-
+                    snake.getSnakeLength().add(new BoardField(Integer.parseInt(arrayOfCoordinates[0]), Integer.parseInt(arrayOfCoordinates[1])));
                 }
+                    snake.getSnakeLength().add(new BoardField(0, 0));
             } catch (FileNotFoundException ex) {
                 ex.getMessage();
             } catch (IOException ex) {
