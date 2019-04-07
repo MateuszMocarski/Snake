@@ -86,4 +86,9 @@ public class SnakeModel {
     public void setLengthOfSnake(int lengthOfSnake) {
         this.lengthOfSnake = lengthOfSnake;
     }
+    
+    public void switching(){
+        this.setRight(false);
+        this.setDown(true);
+}
 }

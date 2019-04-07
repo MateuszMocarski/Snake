@@ -69,8 +69,8 @@ public class GameController implements ActionListener {
     public SnakeModel getSnakeModel() {
         return this.snake;
     }
-    
-    public void setNewSnakeModel(){
+
+    public void setNewSnakeModel() {
         snake = new SnakeModel();
     }
 
@@ -98,12 +98,18 @@ public class GameController implements ActionListener {
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     snake.setSnakeYlength(snake.getSnakeYlength(r), r + 1);
                 }
+                snake.setSnakeXlength(snake.getSnakeXlength(snake.getLengthOfSnake()-1), snake.getLengthOfSnake());
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    BoardField temp = new BoardField(snake.getSnakeXlength(0), snake.getSnakeYlength(0));
                     if (r == 0) {
                         snake.setSnakeXlength(snake.getSnakeXlength(r) + 1, r);
-                    } else {
-                        snake.setSnakeXlength(snake.getSnakeXlength(r - 1), r);
-                    }
+                        snake.getSnakeLength().remove(snake.getLengthOfSnake() - 1);
+                        snake.getSnakeLength().add(1, temp);
+                    } 
+//                    else if (r == snake.getLengthOfSnake() - 1) {
+//                        snake.getSnakeLength().remove(r);
+//                        snake.getSnakeLength().add(1, temp);
+//                    }
 
                     if (snake.getSnakeXlength(r) > 37) {
                         snake.setSnakeXlength(0, r);
@@ -114,12 +120,18 @@ public class GameController implements ActionListener {
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     snake.setSnakeYlength(snake.getSnakeYlength(r), r + 1);
                 }
+                snake.setSnakeXlength(snake.getSnakeXlength(snake.getLengthOfSnake()-1), snake.getLengthOfSnake());
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    BoardField temp = new BoardField(snake.getSnakeXlength(0), snake.getSnakeYlength(0));
                     if (r == 0) {
                         snake.setSnakeXlength(snake.getSnakeXlength(r) - 1, r);
-                    } else {
-                        snake.setSnakeXlength(snake.getSnakeXlength(r - 1), r);
-                    }
+                        snake.getSnakeLength().remove(snake.getLengthOfSnake() - 1);
+                        snake.getSnakeLength().add(1, temp);
+                    } 
+//                    else if (r == snake.getLengthOfSnake() - 1) {
+//                        snake.getSnakeLength().remove(r);
+//                        snake.getSnakeLength().add(1, temp);
+//                    }
                     if (snake.getSnakeXlength(r) < 0) {
                         snake.setSnakeXlength(37, r);
                     }
@@ -130,12 +142,18 @@ public class GameController implements ActionListener {
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     snake.setSnakeXlength(snake.getSnakeXlength(r), r + 1);
                 }
+                snake.setSnakeXlength(snake.getSnakeXlength(snake.getLengthOfSnake()-1), snake.getLengthOfSnake());
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    BoardField temp = new BoardField(snake.getSnakeXlength(0), snake.getSnakeYlength(0));
                     if (r == 0) {
                         snake.setSnakeYlength(snake.getSnakeYlength(r) - 1, r);
-                    } else {
-                        snake.setSnakeYlength(snake.getSnakeYlength(r - 1), r);
-                    }
+                        snake.getSnakeLength().remove(snake.getLengthOfSnake() - 1);
+                        snake.getSnakeLength().add(1, temp);
+                    } 
+//                    else if (r == snake.getLengthOfSnake() - 1) {
+//                        snake.getSnakeLength().remove(r);
+//                        snake.getSnakeLength().add(1, temp);
+//                    }
                     if (snake.getSnakeYlength(r) < 0) {
                         snake.setSnakeYlength(26, r);
                     }
@@ -145,12 +163,18 @@ public class GameController implements ActionListener {
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
                     snake.setSnakeXlength(snake.getSnakeXlength(r), r + 1);
                 }
+                snake.setSnakeXlength(snake.getSnakeXlength(snake.getLengthOfSnake()-1), snake.getLengthOfSnake());
                 for (int r = snake.getLengthOfSnake() - 1; r >= 0; r--) {
+                    BoardField temp = new BoardField(snake.getSnakeXlength(0), snake.getSnakeYlength(0));
                     if (r == 0) {
                         snake.setSnakeYlength(snake.getSnakeYlength(r) + 1, r);
-                    } else {
-                        snake.setSnakeYlength(snake.getSnakeYlength(r - 1), r);
-                    }
+                        snake.getSnakeLength().remove(snake.getLengthOfSnake() - 1);
+                        snake.getSnakeLength().add(1, temp);
+                    } 
+//                    else if (r == snake.getLengthOfSnake() - 1) {
+//                        snake.getSnakeLength().remove(r);
+//                        snake.getSnakeLength().add(1, temp);
+//                    }
                     if (snake.getSnakeYlength(r) > 26) {
                         snake.setSnakeYlength(0, r);
                     }
@@ -191,9 +215,9 @@ public class GameController implements ActionListener {
         }
         return false;
     }
-    
-    public void appleEaten(){
-        snake.getSnakeLength().add(new BoardField(0,0));
+
+    public void appleEaten() {
+        snake.getSnakeLength().add(new BoardField(0, 0));
     }
 
 }

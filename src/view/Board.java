@@ -53,7 +53,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private static List<Score> listOfHighScores = new ArrayList<>();
 
-    private GameController controller = new GameController();
+    private final GameController controller = new GameController();
     private SnakeModel snake = controller.getSnakeModel();
     private final Timer repaintTimer = new Timer(10, this);
 
@@ -209,6 +209,10 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press SPACE to resume game", 360, 425);
         }
+        
+//        if(snake.getLengthOfSnake() >= 5){
+//            snake.switching();
+//        }
     }
 
     @Override
