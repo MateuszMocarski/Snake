@@ -8,7 +8,7 @@ import model.AppleModel;
 import model.SnakeModel;
 import view.Board;
 
-public class GameController implements ActionListener {
+public final class GameController implements ActionListener {
 
     private int delay;
 
@@ -92,6 +92,8 @@ public class GameController implements ActionListener {
                 snake.setUp(false);
                 snake.setDown(false);
                 timer.stop();
+                this.setStopped(true);
+                
 
             }
             BoardField temp = new BoardField(snake.getSnakeLength().get(0).getBoardFieldX(), snake.getSnakeLength().get(0).getBoardFieldY());
@@ -143,7 +145,7 @@ public class GameController implements ActionListener {
             return false;
         }
         for (int i = 1; i <= snake.getLengthOfSnake() - 1; i++) {
-            if (snake.getSnakeXlength(0) == snake.getSnakeXlength(i) && snake.getSnakeYlength(0) == snake.getSnakeYlength(i)) {
+            if (snake.getSnakeLength().get(0).equals(snake.getSnakeLength().get(i))) {
                 stopped = true;
                 return true;
             }
@@ -152,7 +154,6 @@ public class GameController implements ActionListener {
     }
 
     public boolean isAppleEaten(AppleModel appleModel) {
-        System.out.println(snake.getSnakeLength().size());
         return (snake.getSnakeLength().get(0).equals(appleModel.getAppleLocation()));
     }
 
@@ -168,8 +169,20 @@ public class GameController implements ActionListener {
         return false;
     }
 
-    public void appleEaten() {
+    public void appleEaten() {   
         snake.getSnakeLength().add(new BoardField(snake.getSnakeXlength(snake.getLengthOfSnake()-1), snake.getSnakeYlength(snake.getLengthOfSnake()-1)));
     }
+    
+//    public void snakeLocWhisperer(){
+//        for(int i = 0; i < snake.getLengthOfSnake()-1; i++){
+//            System.out.println(snake.getSnakeLength().get(i).toString());
+//        }
+//        System.out.println("=========================================");
+//    }
+//    
+//    public void switcher(){
+//        snake.setRight(false);
+//        snake.setDown(true);
+//    }
 
 }

@@ -4,7 +4,7 @@ import Utilities.BoardField;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnakeModel {
+public final class SnakeModel {
 
     private final List<BoardField> snakeLength = new ArrayList<>();
 

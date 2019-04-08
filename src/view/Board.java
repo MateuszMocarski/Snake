@@ -37,18 +37,18 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private static final int boardWidth = 38;
-    private static final int boardHeight = 27;
+    private static final int BOARD_WIDTH = 38;
+    private static final int BOARD_HEIGHT = 27;
 
     private final int modelSizeWidth = 25;
     private final int modelSizeHeight = 25;
 
     public static int getBoardWidth() {
-        return boardWidth;
+        return BOARD_WIDTH;
     }
 
     public static int getBoardHeight() {
-        return boardHeight;
+        return BOARD_HEIGHT;
     }
 
     private AppleModel appleModel;
@@ -106,7 +106,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         //draw background
         g.setColor(Color.black);
-        g.fillRect(20, 76, this.boardWidth * this.modelSizeWidth, this.boardHeight * this.modelSizeHeight);
+        g.fillRect(20, 76, this.BOARD_WIDTH * this.modelSizeWidth, this.BOARD_HEIGHT * this.modelSizeHeight);
 
         //draw score
         totalScore = 5 * controller.getTotalAmountOfEatenApples();
@@ -225,10 +225,6 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press SPACE to resume game", 360, 425);
         }
-
-//        if(snake.getLengthOfSnake() >= 5){
-//            snake.switching();
-//        }
     }
 
     @Override

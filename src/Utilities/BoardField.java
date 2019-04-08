@@ -50,4 +50,11 @@ public class BoardField {
         return this.BoardFieldY == other.BoardFieldY;
     }
 
+    @Override
+    public String toString() {
+        return "BoardField{" + "BoardFieldX=" + BoardFieldX + "| BoardFieldY=" + BoardFieldY + '}';
+    }
+    
+    
+
 }

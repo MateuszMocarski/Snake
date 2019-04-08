@@ -3,7 +3,7 @@ package model;
 import Utilities.BoardField;
 import java.util.Random;
 
-public class AppleModel {
+public final class AppleModel {
 
 
     private BoardField appleLocation;
@@ -24,18 +24,19 @@ public class AppleModel {
     public BoardField randomizeAppleLocation() {
         int locationX = 0;
         int locationY = 1;
-        BoardField appleLocation = new BoardField(0, 0);
+        BoardField randomAppleLocation;
 
         Random rand = new Random();
         int number = rand.nextInt(37);
         locationX += number;
-        appleLocation.setBoardFieldX(locationX);
+        
 
         number = rand.nextInt(26);
         locationY += number;
-        appleLocation.setBoardFieldY(locationY);
+        
+        randomAppleLocation = new BoardField(locationX, 1);
 
-        return appleLocation;
+        return randomAppleLocation;
 
     }
 
