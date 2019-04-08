@@ -32,7 +32,7 @@ public class AppleModel {
         appleLocation.setBoardFieldX(locationX);
 
         number = rand.nextInt(26);
-        //locationY += number;
+        locationY += number;
         appleLocation.setBoardFieldY(locationY);
 
         return appleLocation;

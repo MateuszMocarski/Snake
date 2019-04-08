@@ -9,6 +9,7 @@ public class SnakeModel {
     private final List<BoardField> snakeLength = new ArrayList<>();
 
     public SnakeModel(){
+        this.getSnakeLength().clear();
         this.getSnakeLength().add(new BoardField(3, 1));
         this.getSnakeLength().add(new BoardField(2, 1));
         this.getSnakeLength().add(new BoardField(1, 1));

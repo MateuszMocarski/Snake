@@ -37,6 +37,20 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static final int boardWidth = 38;
+    private static final int boardHeight = 27;
+
+    private final int modelSizeWidth = 25;
+    private final int modelSizeHeight = 25;
+
+    public static int getBoardWidth() {
+        return boardWidth;
+    }
+
+    public static int getBoardHeight() {
+        return boardHeight;
+    }
+
     private AppleModel appleModel;
     private int appleAmount = 0;
     private ImageIcon apple;
@@ -48,7 +62,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     private int totalScore;
 
     private boolean reset = false;
-    
+
     private boolean saveStatus = false;
 
     private static List<Score> listOfHighScores = new ArrayList<>();
@@ -62,13 +76,15 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        controller.runTimer(this);
-        repaintTimer.start();
+        if (snake.isDown() || snake.isLeft() || snake.isRight() || snake.isUp()) {
+            controller.runTimer(this);
+            repaintTimer.start();
+        }
     }
 
     @Override
     public void paint(Graphics g) {
-        if(controller.getMoves()==-1){
+        if (controller.getMoves() == -1) {
             snake.getSnakeLength().clear();
             snake.getSnakeLength().add(new BoardField(3, 1));
             snake.getSnakeLength().add(new BoardField(2, 1));
@@ -90,7 +106,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         //draw background
         g.setColor(Color.black);
-        g.fillRect(20, 76, 950, 675);
+        g.fillRect(20, 76, this.boardWidth * this.modelSizeWidth, this.boardHeight * this.modelSizeHeight);
 
         //draw score
         totalScore = 5 * controller.getTotalAmountOfEatenApples();
@@ -150,7 +166,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         if (controller.isAppleEaten(appleModel)) {
             controller.appleEaten();
-            snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);    
+            snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
             appleAmount--;
             controller.setTotalAmountOfEatenApples(controller.getTotalAmountOfEatenApples() + 1);
         }
@@ -183,7 +199,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         }
 
-        if (controller.getMoves() == -1 && snakeSave.exists()) {
+        if (controller.getMoves() == 0 && snakeSave.exists()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press 'L' to load game", 400, 350);
@@ -209,7 +225,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("arial", Font.BOLD, 20));
             g.drawString("Press SPACE to resume game", 360, 425);
         }
-        
+
 //        if(snake.getLengthOfSnake() >= 5){
 //            snake.switching();
 //        }
@@ -328,11 +344,11 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     }
 
     public int fieldToCoordTranslatorX(int bf) {
-        return 20 + bf * 25;
+        return 20 + bf * this.modelSizeWidth;
     }
 
     public int fieldToCoordTranslatorY(int bf) {
-        return 76 + bf * 25;
+        return 76 + bf * this.modelSizeHeight;
     }
 
 }
