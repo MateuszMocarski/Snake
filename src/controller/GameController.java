@@ -92,9 +92,6 @@ public final class GameController implements ActionListener {
                 snake.setUp(false);
                 snake.setDown(false);
                 timer.stop();
-                this.setStopped(true);
-                
-
             }
             BoardField temp = new BoardField(snake.getSnakeLength().get(0).getBoardFieldX(), snake.getSnakeLength().get(0).getBoardFieldY());
             if (snake.isRight()) {
@@ -134,8 +131,6 @@ public final class GameController implements ActionListener {
             }
             snake.getSnakeLength().remove(snake.getLengthOfSnake()-1);
             snake.getSnakeLength().add(1, temp);
-        } else {
-            timer.stop();
         }
 
     }

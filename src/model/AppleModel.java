@@ -34,7 +34,7 @@ public final class AppleModel {
         number = rand.nextInt(26);
         locationY += number;
         
-        randomAppleLocation = new BoardField(locationX, 1);
+        randomAppleLocation = new BoardField(locationX, locationY);
 
         return randomAppleLocation;
 
