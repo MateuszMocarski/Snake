@@ -1,4 +1,3 @@
-
 package Utilities;
 
 import java.awt.Color;
@@ -20,20 +19,20 @@ import view.Board;
  * @author Mateusz
  */
 public class HighScores {
-    
+
     public static List addToHighScores(List<Score> listOfScores, Score score) {
         listOfScores.add(score);
         return listOfScores;
     }
-    
+
     public static List sortHighScoresList(List<Score> listOfHighScores) {
         Collections.sort(listOfHighScores);
         return listOfHighScores;
     }
-    
+
     public static void saveHighScoresList(List<Score> listOfHighScores) {
         try {
-            BufferedWriter writer = null;
+            BufferedWriter writer;
 
             File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
             if (!snakeDirectory.exists()) {
@@ -66,7 +65,7 @@ public class HighScores {
         }
         listOfHighScores.clear();
     }
-    
+
     public static List<Score> loadHighScoresList() {
         List<Score> list = Board.getListOfHighScores();
         File highScores = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake\\highscores.txt");
@@ -88,7 +87,7 @@ public class HighScores {
         }
         return list;
     }
-    
+
     public static void write3HighestScores(List<Score> listOfScores, Graphics g) {
         if (listOfScores.size() < 3) {
             for (int i = 0; i < listOfScores.size(); i++) {

@@ -6,46 +6,45 @@ import java.util.List;
 
 public final class SnakeModel {
 
-    private final List<BoardField> snakeLength = new ArrayList<>();
+    private final List<BoardField> snakeElements = new ArrayList<>();
 
-    public SnakeModel(){
-        this.getSnakeLength().clear();
-        this.getSnakeLength().add(new BoardField(3, 1));
-        this.getSnakeLength().add(new BoardField(2, 1));
-        this.getSnakeLength().add(new BoardField(1, 1));
-        this.getSnakeLength().add(new BoardField(0, 0));
+    public SnakeModel() {
+        this.getSnakeElement().clear();
+        this.getSnakeElement().add(new BoardField(3, 1));
+        this.getSnakeElement().add(new BoardField(2, 1));
+        this.getSnakeElement().add(new BoardField(1, 1));
+        this.getSnakeElement().add(new BoardField(0, 0));
     }
 
     private boolean left = false;
-    private boolean right = false;
+    private boolean right = true;
     private boolean up = false;
     private boolean down = false;
 
     private int lengthOfSnake = 3;
-    
-    public List<BoardField> getSnakeLength() {
-        return snakeLength;
-    }
-    
-    public void setSnakeLength(int i, BoardField bf){
-        this.snakeLength.set(i, bf);
+
+    public List<BoardField> getSnakeElement() {
+        return snakeElements;
     }
 
-    
+    public void setSnakeLength(int i, BoardField bf) {
+        this.snakeElements.set(i, bf);
+    }
+
     public int getSnakeXlength(int r) {
-        return snakeLength.get(r).getBoardFieldX();
+        return snakeElements.get(r).getBoardFieldX();
     }
 
     public void setSnakeXlength(int snakeXlength, int i) {
-        this.snakeLength.get(i).setBoardFieldX(snakeXlength);
+        this.snakeElements.get(i).setBoardFieldX(snakeXlength);
     }
 
     public int getSnakeYlength(int r) {
-        return snakeLength.get(r).getBoardFieldY();
+        return snakeElements.get(r).getBoardFieldY();
     }
 
     public void setSnakeYlength(int snakeYlength, int i) {
-        this.snakeLength.get(i).setBoardFieldY(snakeYlength);
+        this.snakeElements.get(i).setBoardFieldY(snakeYlength);
     }
 
     public boolean isLeft() {
@@ -87,9 +86,4 @@ public final class SnakeModel {
     public void setLengthOfSnake(int lengthOfSnake) {
         this.lengthOfSnake = lengthOfSnake;
     }
-    
-    public void switching(){
-        this.setRight(false);
-        this.setDown(true);
-}
 }

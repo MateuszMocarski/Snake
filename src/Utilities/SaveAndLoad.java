@@ -8,13 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import model.AppleModel;
 import model.SnakeModel;
 
 public class SaveAndLoad {
 
     public static void saveGame(SnakeModel snake, GameController controller) {
-        BufferedWriter writer = null;
+        BufferedWriter writer;
         try {
             File snakeDirectory = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\Snake");
             if (!snakeDirectory.exists()) {
@@ -94,13 +93,13 @@ public class SaveAndLoad {
                     snake.setUp(false);
                     snake.setDown(true);
                 }
-                    snake.getSnakeLength().clear();
+                snake.getSnakeElement().clear();
                 for (int i = 0; i <= snake.getLengthOfSnake() - 1; i++) {
                     String coordinates = br.readLine();
                     String[] arrayOfCoordinates = coordinates.split("\\|");
-                    snake.getSnakeLength().add(new BoardField(Integer.parseInt(arrayOfCoordinates[0]), Integer.parseInt(arrayOfCoordinates[1])));
+                    snake.getSnakeElement().add(new BoardField(Integer.parseInt(arrayOfCoordinates[0]), Integer.parseInt(arrayOfCoordinates[1])));
                 }
-                    snake.getSnakeLength().add(new BoardField(0, 0));
+                snake.getSnakeElement().add(new BoardField(0, 0));
             } catch (FileNotFoundException ex) {
                 ex.getMessage();
             } catch (IOException ex) {

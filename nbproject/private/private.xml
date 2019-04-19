@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/model/SnakeModel.java</file>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/Utilities/SaveAndLoad.java</file>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/Utilities/BoardField.java</file>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/controller/GameController.java</file>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/view/Board.java</file>
-            <file>file:/C:/Users/Mateusz/Documents/NetBeansProjects/Snake/src/model/AppleModel.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/view/Board.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/Utilities/HighScores.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/model/SnakeModel.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/trigger/SnakeMain.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/controller/GameController.java</file>
+            <file>file:/C:/Users/Tolek/Desktop/Mateusz/snake/Snake/src/Utilities/SaveAndLoad.java</file>
         </group>
     </open-files>
 </project-private>

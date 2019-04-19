@@ -52,7 +52,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     }
 
     private AppleModel appleModel;
-    private int appleAmount = 0;
+    private boolean isAppleOnBoard = false;
     private ImageIcon apple;
 
     private ImageIcon snake_torso;
@@ -85,11 +85,11 @@ public class Board extends JPanel implements KeyListener, ActionListener {
     @Override
     public void paint(Graphics g) {
         if (controller.getMoves() == -1) {
-            snake.getSnakeLength().clear();
-            snake.getSnakeLength().add(new BoardField(3, 1));
-            snake.getSnakeLength().add(new BoardField(2, 1));
-            snake.getSnakeLength().add(new BoardField(1, 1));
-            snake.getSnakeLength().add(new BoardField(0, 0));
+            snake.getSnakeElement().clear();
+            snake.getSnakeElement().add(new BoardField(3, 1));
+            snake.getSnakeElement().add(new BoardField(2, 1));
+            snake.getSnakeElement().add(new BoardField(1, 1));
+            snake.getSnakeElement().add(new BoardField(0, 0));
             controller.setMoves(0);
         }
         //title image border
@@ -106,7 +106,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
 
         //draw background
         g.setColor(Color.black);
-        g.fillRect(20, 76, this.BOARD_WIDTH * this.modelSizeWidth, this.BOARD_HEIGHT * this.modelSizeHeight);
+        g.fillRect(20, 76, Board.BOARD_WIDTH * this.modelSizeWidth, Board.BOARD_HEIGHT * this.modelSizeHeight);
 
         //draw score
         totalScore = 5 * controller.getTotalAmountOfEatenApples();
@@ -153,11 +153,11 @@ public class Board extends JPanel implements KeyListener, ActionListener {
                 snake_torso.paintIcon(this, g, this.fieldToCoordTranslatorX(snake.getSnakeXlength(a)), this.fieldToCoordTranslatorY(snake.getSnakeYlength(a)));
             }
         }
-        if (appleAmount == 0) {
+        if (!isAppleOnBoard) {
             appleModel = new AppleModel();
-            appleAmount++;
+            isAppleOnBoard = true;
             if (controller.appleNotOnSnake(appleModel)) {
-                appleAmount--;
+                isAppleOnBoard = false;
             }
 
         }
@@ -167,7 +167,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         if (controller.isAppleEaten(appleModel)) {
             controller.appleEaten();
             snake.setLengthOfSnake(snake.getLengthOfSnake() + 1);
-            appleAmount--;
+            isAppleOnBoard = false;
             controller.setTotalAmountOfEatenApples(controller.getTotalAmountOfEatenApples() + 1);
         }
 
@@ -322,7 +322,7 @@ public class Board extends JPanel implements KeyListener, ActionListener {
         if ((controller.getMoves() == 0 || controller.isStopped()) && e.getKeyCode() == KeyEvent.VK_L) {
             this.snake = SaveAndLoad.loadGame(controller);
             controller.setStopped(false);
-            this.appleAmount = 0;
+            this.isAppleOnBoard = false;
             saveStatus = false;
             ActionEvent asd = null;
             controller.actionPerformed(asd);
